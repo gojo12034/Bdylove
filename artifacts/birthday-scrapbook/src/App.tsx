@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useBirthdayMusic } from '@/hooks/use-birthday-music';
 
 const memories = [
   {
@@ -50,6 +51,8 @@ function Heart({ className = '' }: { className?: string }) {
 }
 
 function App() {
+  const { isPlaying, error: musicError, toggleMusic } = useBirthdayMusic();
+
   useEffect(() => {
     const targets = document.querySelectorAll<HTMLElement>('.reveal');
     if (!('IntersectionObserver' in window)) {
@@ -82,6 +85,22 @@ function App() {
           <span>A little book of us</span>
         </div>
         <span className="topbar-note">Made for your birthday</span>
+        <div className="music-control">
+          <button
+            className="music-button"
+            type="button"
+            onClick={toggleMusic}
+            aria-pressed={isPlaying}
+            aria-label={isPlaying ? 'Pause the birthday music' : 'Play the birthday music'}
+            data-testid="button-music-toggle"
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18V5l12-2v13M9 18c0 1.1-1.3 2-3 2s-3-.9-3-2 1.3-2 3-2 3 .9 3 2Zm12-2c0 1.1-1.3 2-3 2s-3-.9-3-2 1.3-2 3-2 3 .9 3 2ZM9 8l12-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span>{isPlaying ? 'Pause music' : 'Play music'}</span>
+          </button>
+          <span className="music-status" role="status" aria-live="polite">{musicError}</span>
+        </div>
       </header>
 
       <section className="hero" aria-labelledby="hero-title">

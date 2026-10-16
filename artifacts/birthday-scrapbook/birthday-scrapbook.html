@@ -32,6 +32,25 @@
     @media(max-width:760px){.topbar{width:calc(100% - 36px);min-height:62px}.topbar-note{font-size:9px;letter-spacing:.1em}.hero{width:calc(100% - 38px);min-height:auto;grid-template-columns:1fr;gap:28px;padding:69px 0 52px}.hero-copy{padding:0 8px}h1{font-size:clamp(62px,18vw,98px);margin:20px 0}.hero-description{font-size:14px}.hero-art{min-height:405px;margin:0 7px}.hero-photo{height:390px;width:min(100%,370px)}.floating-stamp{width:98px;height:98px;font-size:14px;left:-4px;bottom:0}.intro-note{font-size:18px;margin-bottom:78px}.memory-section{width:calc(100% - 40px);padding-bottom:54px}.section-heading{margin-bottom:48px}.memory,.memory:nth-of-type(even){grid-template-columns:1fr;gap:27px;margin-bottom:75px}.memory:nth-of-type(even) .memory-art,.memory:nth-of-type(even) .memory-copy{order:initial}.memory-art{max-width:500px;width:100%;justify-self:center}.memory-copy{max-width:490px;justify-self:center;padding:0 8px}.memory-copy h3{font-size:39px}.birthday-note{padding:86px 24px 96px}.letter-card p{font-size:14px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
   </style>
+  <style>
+    .music-control{position:relative;display:flex;align-items:center}
+    .music-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:0 14px;border:1px solid rgba(165,80,98,.34);border-radius:999px;color:#8d4356;background:rgba(255,250,241,.64);font:600 10px/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+    .music-button svg{width:15px;height:15px}.music-button:hover{transform:translateY(-2px);background:#fffaf1;box-shadow:0 6px 18px rgba(79,49,48,.1)}.music-button[aria-pressed=true]{background:#f0e0dc}.music-button:focus-visible{outline:2px solid var(--wine);outline-offset:4px}
+    .music-status{position:absolute;top:calc(100% + 8px);right:0;z-index:5;width:max-content;max-width:230px;padding:8px 10px;border:1px solid rgba(165,80,98,.25);border-radius:5px;background:#fffaf1;box-shadow:0 8px 20px rgba(79,49,48,.1);color:#80666a;font-size:11px;line-height:1.45}.music-status:empty{display:none}
+    .hero-photo{transform-origin:60% 50%;animation:cover-photo-arrive 1.15s cubic-bezier(.2,.7,.2,1) .12s both}
+    .hero-photo img{transition:transform .9s cubic-bezier(.2,.7,.2,1)}.hero-photo:hover img{transform:scale(1.045)}
+    .memory-art{transform-origin:center;transition:box-shadow .45s ease}.memory-art:hover{box-shadow:0 26px 56px rgba(79,49,48,.2)}
+    .memory-art img{transition:transform .75s cubic-bezier(.2,.7,.2,1),filter .75s ease}.memory-art:hover img{filter:saturate(1)}
+    .memory:nth-of-type(1) .memory-art:hover img{transform:scale(1.055) rotate(-.8deg)}.memory:nth-of-type(2) .memory-art:hover img{transform:scale(1.06) rotate(.8deg)}.memory:nth-of-type(3) .memory-art:hover img{transform:scale(1.05) translateY(-3px)}.memory:nth-of-type(4) .memory-art:hover img{transform:scale(1.06) rotate(-.7deg)}
+    .memory:nth-of-type(1).is-visible .memory-art{animation:photo-memory-one .95s cubic-bezier(.2,.7,.2,1) .05s both}.memory:nth-of-type(2).is-visible .memory-art{animation:photo-memory-two 1s cubic-bezier(.2,.7,.2,1) .1s both}.memory:nth-of-type(3).is-visible .memory-art{animation:photo-memory-three 1s cubic-bezier(.2,.7,.2,1) .08s both}.memory:nth-of-type(4).is-visible .memory-art{animation:photo-memory-four 1.05s cubic-bezier(.2,.7,.2,1) .12s both}
+    @keyframes cover-photo-arrive{0%{opacity:0;transform:translate(28px,24px) rotate(8deg) scale(.94)}72%{opacity:1}100%{opacity:1;transform:rotate(2.2deg) scale(1)}}
+    @keyframes photo-memory-one{0%{opacity:0;transform:translate(-30px,28px) rotate(-7deg) scale(.93)}75%{opacity:1}100%{opacity:1;transform:rotate(0) scale(1)}}
+    @keyframes photo-memory-two{0%{opacity:0;transform:translate(28px,14px) rotate(8deg) scale(.92)}75%{opacity:1}100%{opacity:1;transform:rotate(-1.5deg) scale(1)}}
+    @keyframes photo-memory-three{0%{opacity:0;transform:translateY(25px) rotate(-6deg) scale(.84)}75%{opacity:1}100%{opacity:1;transform:rotate(1.4deg) scale(1)}}
+    @keyframes photo-memory-four{0%{opacity:0;transform:translateY(-28px) rotate(7deg) scale(.94)}75%{opacity:1}100%{opacity:1;transform:rotate(-1deg) scale(1)}}
+    @media(max-width:760px){.topbar-note{display:none}.music-button{min-height:36px;padding:0 11px;font-size:9px}}
+    @media(prefers-reduced-motion:reduce){.hero-photo,.memory-art{animation:none!important}}
+  </style>
 </head>
 <body>
 <main class="scrapbook">
@@ -39,6 +58,13 @@
   <header class="topbar">
     <div class="brand"><svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 27s-11-6.8-11-15a6.2 6.2 0 0 1 11-3.9A6.2 6.2 0 0 1 27 12c0 8.2-11 15-11 15Z" stroke="currentColor" stroke-width="1.5"/></svg><span>A little book of us</span></div>
     <span class="topbar-note">Made for your birthday</span>
+    <div class="music-control">
+      <button class="music-button" id="music-toggle" type="button" aria-pressed="false" aria-label="Play the birthday music" data-testid="button-music-toggle">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18V5l12-2v13M9 18c0 1.1-1.3 2-3 2s-3-.9-3-2 1.3-2 3-2 3 .9 3 2Zm12-2c0 1.1-1.3 2-3 2s-3-.9-3-2 1.3-2 3-2 3 .9 3 2ZM9 8l12-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="music-label">Play music</span>
+      </button>
+      <span class="music-status" id="music-status" role="status" aria-live="polite"></span>
+    </div>
   </header>
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-copy"><span class="eyebrow">For the one who makes every day brighter</span><h1 id="hero-title">Today is<br>all <em>about you.</em></h1><p class="hero-description">A few favorite moments, a whole lot of love, and one more reason to celebrate the person you are.</p><a class="hero-link" href="#memories">Turn the page <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v13m0 0 5-5m-5 5-5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
@@ -88,6 +114,107 @@
       });
     }, { threshold: .14 });
     targets.forEach((target) => observer.observe(target));
+  })();
+</script>
+<script>
+  (() => {
+    const button = document.getElementById('music-toggle');
+    const label = button && button.querySelector('.music-label');
+    const status = document.getElementById('music-status');
+    if (!button || !label || !status) return;
+
+    const melody = [72, 76, 79, 84, 81, 79, 76, 74, 72, 79, 76, 72];
+    const chordRoots = [48, 53, 55, 48];
+    const beatSeconds = .72;
+    let context = null;
+    let masterGain = null;
+    let timer = null;
+    let beatIndex = 0;
+
+    const midiToFrequency = note => 440 * Math.pow(2, (note - 69) / 12);
+    const playTone = (frequency, startAt, duration, volume, type = 'sine') => {
+      const oscillator = context.createOscillator();
+      const envelope = context.createGain();
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, startAt);
+      envelope.gain.setValueAtTime(.0001, startAt);
+      envelope.gain.linearRampToValueAtTime(volume, startAt + .045);
+      envelope.gain.exponentialRampToValueAtTime(.0001, startAt + duration);
+      oscillator.connect(envelope);
+      envelope.connect(masterGain);
+      oscillator.start(startAt);
+      oscillator.stop(startAt + duration + .02);
+    };
+    const setPlaying = playing => {
+      button.setAttribute('aria-pressed', String(playing));
+      button.setAttribute('aria-label', playing ? 'Pause the birthday music' : 'Play the birthday music');
+      label.textContent = playing ? 'Pause music' : 'Play music';
+    };
+    const pauseMusic = () => {
+      if (timer !== null) {
+        window.clearInterval(timer);
+        timer = null;
+      }
+      if (context && masterGain && context.state !== 'closed') {
+        const now = context.currentTime;
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.setTargetAtTime(.0001, now, .045);
+      }
+      setPlaying(false);
+    };
+    const startMusic = async () => {
+      try {
+        if (typeof window.AudioContext !== 'function') {
+          status.textContent = 'Music playback is not available in this browser.';
+          return;
+        }
+        context = context || new window.AudioContext({ latencyHint: 'interactive' });
+        if (!masterGain) {
+          masterGain = context.createGain();
+          masterGain.gain.setValueAtTime(.0001, context.currentTime);
+          masterGain.connect(context.destination);
+        }
+        await context.resume();
+        status.textContent = '';
+        const now = context.currentTime;
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.setValueAtTime(Math.max(masterGain.gain.value, .0001), now);
+        masterGain.gain.linearRampToValueAtTime(.28, now + .2);
+        let nextBeatAt = now + .05;
+        const scheduleAhead = () => {
+          while (nextBeatAt < context.currentTime + .16) {
+            const step = beatIndex % melody.length;
+            const root = chordRoots[Math.floor(step / 3) % chordRoots.length];
+            if (step % 3 === 0) {
+              [root, root + 4, root + 7].forEach((note, index) => {
+                playTone(midiToFrequency(note + (index === 2 ? 12 : 0)), nextBeatAt, beatSeconds * 2.75, .018);
+              });
+              playTone(midiToFrequency(root - 12), nextBeatAt, beatSeconds * .82, .038, 'triangle');
+            }
+            playTone(midiToFrequency(melody[step]), nextBeatAt, beatSeconds * .68, .095);
+            if (step % 3 === 2) {
+              playTone(midiToFrequency(melody[step] + 12), nextBeatAt, beatSeconds * .9, .022);
+            }
+            beatIndex += 1;
+            nextBeatAt += beatSeconds;
+          }
+        };
+        scheduleAhead();
+        timer = window.setInterval(scheduleAhead, 45);
+        setPlaying(true);
+      } catch {
+        pauseMusic();
+        status.textContent = 'The birthday music could not be started. Please try again.';
+      }
+    };
+    button.addEventListener('click', () => {
+      if (button.getAttribute('aria-pressed') === 'true') pauseMusic();
+      else void startMusic();
+    });
+    window.addEventListener('pagehide', () => {
+      if (timer !== null) window.clearInterval(timer);
+      if (context && context.state !== 'closed') void context.close();
+    }, { once: true });
   })();
 </script>
 </body>
