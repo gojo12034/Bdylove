@@ -1,9 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { useBirthdayMusic } from '@/hooks/use-birthday-music';
 
 type PublicPhoto = {
   src: string;
   name: string;
+  title: string;
+};
+
+type ZoomPhoto = {
+  src: string;
+  alt: string;
   title: string;
 };
 
@@ -70,6 +78,14 @@ function App() {
   const { isPlaying, error: musicError, toggleMusic } = useBirthdayMusic();
   const [publicPhotos, setPublicPhotos] = useState<PublicPhoto[]>([]);
   const [photoLoadError, setPhotoLoadError] = useState('');
+  const [activePhoto, setActivePhoto] = useState<ZoomPhoto | null>(null);
+  const photoCloseButtonRef = useRef<HTMLButtonElement>(null);
+  const photoTriggerRef = useRef<HTMLButtonElement | null>(null);
+
+  function openPhoto(event: MouseEvent<HTMLButtonElement>, photo: ZoomPhoto) {
+    photoTriggerRef.current = event.currentTarget;
+    setActivePhoto(photo);
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -123,7 +139,26 @@ function App() {
     return () => observer.disconnect();
   }, [publicPhotos.length]);
 
+  useEffect(() => {
+    if (!activePhoto) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setActivePhoto(null);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    photoCloseButtonRef.current?.focus();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+      photoTriggerRef.current?.focus();
+    };
+  }, [activePhoto]);
+
   return (
+    <>
     <main className="scrapbook">
       <a className="skip-link" href="#memories">Skip to the memories</a>
       <header className="topbar">
@@ -164,12 +199,22 @@ function App() {
         </div>
         <div className="hero-art">
           <Heart className="heart-one" /><Heart className="heart-two" /><Heart className="heart-three" />
-          <div className="hero-photo">
+          <button
+            className="hero-photo photo-trigger"
+            type="button"
+            onClick={(event) => openPhoto(event, {
+              src: '/sample-memory-1.jpg',
+              alt: 'Illustrative sample photo of two people walking hand in hand on a beach at sunset',
+              title: 'Our favorite kind of day',
+            })}
+            aria-label="Enlarge the cover photo"
+          >
             <span className="tape" aria-hidden="true" />
             {/* SAMPLE IMAGE — replace /sample-memory-1.jpg with your own photograph; this illustration is not the recipient. */}
             <img src="/sample-memory-1.jpg" alt="Illustrative sample photo of two people walking hand in hand on a beach at sunset" />
+            <span className="photo-zoom-hint">Tap to zoom</span>
             <span className="photo-label">our favorite kind of day</span>
-          </div>
+          </button>
           <div className="floating-stamp" aria-hidden="true">you make<br />life lovely</div>
         </div>
       </section>
@@ -186,9 +231,19 @@ function App() {
         {photoLoadError && <p className="photo-load-error" role="alert">{photoLoadError}</p>}
         {memories.map((memory) => (
           <article className="memory reveal" key={memory.number}>
-            <div className="memory-art">
+            <button
+              className="memory-art photo-trigger"
+              type="button"
+              onClick={(event) => openPhoto(event, {
+                src: memory.image,
+                alt: memory.alt,
+                title: memory.title,
+              })}
+              aria-label={`Enlarge photo: ${memory.title}`}
+            >
               <img src={memory.image} alt={memory.alt} loading="lazy" />
-            </div>
+              <span className="photo-zoom-hint">Tap to zoom</span>
+            </button>
             <div className="memory-copy">
               <span className="memory-index">{memory.number}</span>
               <h3>{memory.title}</h3>
@@ -201,13 +256,23 @@ function App() {
           const number = String(memories.length + index + 1).padStart(2, '0');
           return (
             <article className="memory reveal" key={photo.src}>
-              <div className="memory-art">
+              <button
+                className="memory-art photo-trigger"
+                type="button"
+                onClick={(event) => openPhoto(event, {
+                  src: `${import.meta.env.BASE_URL}${photo.src}`,
+                  alt: `Added scrapbook photo: ${photo.title}`,
+                  title: photo.title,
+                })}
+                aria-label={`Enlarge photo: ${photo.title}`}
+              >
                 <img
                   src={`${import.meta.env.BASE_URL}${photo.src}`}
                   alt={`Added scrapbook photo: ${photo.title}`}
                   loading="lazy"
                 />
-              </div>
+                <span className="photo-zoom-hint">Tap to zoom</span>
+              </button>
               <div className="memory-copy">
                 <span className="memory-index">{number} / Added photo</span>
                 <h3>{photo.title}</h3>
@@ -248,6 +313,32 @@ function App() {
         <span>A small keepsake for a very big love.</span>
       </footer>
     </main>
+    {activePhoto && createPortal(
+      <div
+        className="photo-lightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Enlarged photo: ${activePhoto.title}`}
+        onClick={() => setActivePhoto(null)}
+      >
+        <button
+          className="lightbox-close"
+          type="button"
+          ref={photoCloseButtonRef}
+          onClick={() => setActivePhoto(null)}
+          aria-label="Close enlarged photo"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <figure className="lightbox-frame" onClick={(event) => event.stopPropagation()}>
+          <img src={activePhoto.src} alt={activePhoto.alt} />
+          <figcaption>{activePhoto.title}</figcaption>
+        </figure>
+        <p className="lightbox-instruction">Press Esc or click outside the photo to close</p>
+      </div>,
+      document.body,
+    )}
+    </>
   );
 }
 
