@@ -220,13 +220,13 @@ function App() {
       </section>
 
       <p className="intro-note reveal">For all the little moments that became <span>our favorite memories.</span></p>
-      <div className="placeholder-notice">Personalize this page: replace each SAMPLE IMAGE FILE and sample caption with your own photos and memories. These generated illustrative photos are placeholders and do not depict the birthday recipient. To add more photos automatically, put JPG, PNG, GIF, WebP, or AVIF files in public/photos.</div>
+      <div className="placeholder-notice"></div>
 
       <section className="memory-section" id="memories" aria-labelledby="memory-heading">
         <div className="section-heading reveal">
           <span className="section-kicker">A few pages from my favorite story</span>
           <h2 id="memory-heading">The moments I keep</h2>
-          <p>Sample captions below are prompts to make your own. Add photos to public/photos and they’ll appear here automatically.</p>
+          <p></p>
         </div>
         {photoLoadError && <p className="photo-load-error" role="alert">{photoLoadError}</p>}
         {memories.map((memory) => (
@@ -290,17 +290,17 @@ function App() {
             <path d="M16 27s-11-6.8-11-15a6.2 6.2 0 0 1 11-3.9A6.2 6.2 0 0 1 27 12c0 8.2-11 15-11 15Z" stroke="currentColor" strokeWidth="1.4" />
           </svg>
           <p className="letter-to">To my favorite person,</p>
-          <h2 id="letter-heading">Happy birthday,<br />my love.</h2>
+          <h2 id="letter-heading">Happy birthday,<br />Ashley</h2>
           <p>Another year of you in this world is a gift to everyone lucky enough to know you. Thank you for your kind heart, your bright laugh, and the way you make even the quietest moments feel like home. I hope this next trip around the sun brings you all the tenderness and joy you give so freely to everyone around you.</p>
-          <p className="letter-signoff">All my love,<br />[Your name]</p>
-          <span className="letter-small">Replace the name and make these words yours</span>
+          <p className="letter-signoff">All my love,<br />Billy</p>
+          <span className="letter-small"></span>
         </div>
       </section>
       <footer className="footer">
         {/* Replace this placeholder destination with the site you want to open. */}
         <a
           className="birthday-cta"
-          href="https://example.com"
+          href="https://for-bday.onrender.com/"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Click to open your special birthday link in a new tab"
