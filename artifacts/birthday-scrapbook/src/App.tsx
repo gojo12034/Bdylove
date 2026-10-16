@@ -161,7 +161,22 @@ function App() {
           <span className="letter-small">Replace the name and make these words yours</span>
         </div>
       </section>
-      <footer className="footer">A small keepsake for a very big love.</footer>
+      <footer className="footer">
+        {/* Replace this placeholder destination with the site you want to open. */}
+        <a
+          className="birthday-cta"
+          href="https://example.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Click to open your special birthday link in a new tab"
+        >
+          Click
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M11 3h6v6m0-6-8 8M15 11v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
+        <span>A small keepsake for a very big love.</span>
+      </footer>
     </main>
   );
 }

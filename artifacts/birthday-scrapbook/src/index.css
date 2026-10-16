@@ -310,7 +310,19 @@
 .letter-card p { max-width: 550px; margin: 0 auto; color: #715b60; font-size: 15px; line-height: 1.95; }
 .letter-signoff { margin-top: 34px!important; font: italic 22px/1.6 var(--app-font-serif)!important; color: #8f4c5d!important; }
 .letter-small { display: block; margin-top: 42px; font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: #987a78; }
-.footer { text-align: center; padding: 26px 20px 32px; font-size: 10px; color: #9a8180; letter-spacing: .1em; }
+.footer { display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; padding: 30px 20px 34px; font-size: 10px; color: #9a8180; letter-spacing: .1em; }
+.birthday-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 46px; padding: 0 25px; border: 1px solid #a55062; border-radius: 999px;
+  background: #a55062; color: #fffaf1; text-decoration: none;
+  font: 600 11px/1 var(--app-font-sans); letter-spacing: .16em; text-transform: uppercase;
+  box-shadow: 0 8px 22px rgba(79,49,48,.14);
+  transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.birthday-cta svg { width: 14px; height: 14px; }
+.birthday-cta:hover { transform: translateY(-2px); background: #8f4355; box-shadow: 0 12px 28px rgba(79,49,48,.2); }
+.birthday-cta:hover svg { transform: translate(2px,-2px); }
+.birthday-cta:focus-visible { outline: 2px solid var(--wine); outline-offset: 4px; }
 .placeholder-notice {
   width: fit-content; max-width: calc(100% - 36px); margin: 0 auto 36px; padding: 10px 15px;
   border: 1px dashed rgba(165,80,98,.38); border-radius: 4px;
