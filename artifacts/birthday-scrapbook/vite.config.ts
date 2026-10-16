@@ -1,7 +1,9 @@
 import path from 'path';
+import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
+import type { Plugin, ViteDevServer } from 'vite';
 
 import runtimeErrorOverlay from '@replit/vite-plugin-runtime-error-modal';
 
@@ -27,9 +29,120 @@ if (!basePath) {
   );
 }
 
+const photoExtensions = new Set(['.avif', '.gif', '.jpeg', '.jpg', '.png', '.webp']);
+
+function publicPhotosPlugin(): Plugin {
+  let publicDir = '';
+  let photosDir = '';
+  let manifestPath = '';
+  let devServer: ViteDevServer | undefined;
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined;
+  let manifestQueue: Promise<void> = Promise.resolve();
+
+  async function findPhotos(directory: string): Promise<string[]> {
+    const entries = await readdir(directory, { withFileTypes: true });
+    const found = await Promise.all(
+      entries.map(async (entry) => {
+        const entryPath = path.join(directory, entry.name);
+        if (entry.isDirectory()) return findPhotos(entryPath);
+        if (
+          entry.isFile() &&
+          photoExtensions.has(path.extname(entry.name).toLowerCase())
+        ) {
+          return [entryPath];
+        }
+        return [];
+      }),
+    );
+    return found.flat();
+  }
+
+  async function writePhotoManifest() {
+    await mkdir(photosDir, { recursive: true });
+    const files = (await findPhotos(photosDir)).sort((a, b) =>
+      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
+    );
+    const manifest = files.map((filePath) => {
+      const filename = path.basename(filePath, path.extname(filePath));
+      const readableName = filename
+        .replace(/[-_]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const relativeUrl = path
+        .relative(publicDir, filePath)
+        .split(path.sep)
+        .map(encodeURIComponent)
+        .join('/');
+
+      return {
+        src: relativeUrl,
+        name: filename,
+        title: readableName || 'A favorite moment',
+      };
+    });
+
+    await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  }
+
+  function scheduleManifestRefresh() {
+    if (refreshTimer) clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => {
+      manifestQueue = manifestQueue
+        .then(async () => {
+          await writePhotoManifest();
+          devServer?.ws.send({ type: 'full-reload' });
+        })
+        .catch((error: unknown) => {
+          const detail = error instanceof Error ? error.message : String(error);
+          devServer?.config.logger.error(
+            `Failed to refresh the public photo list: ${detail}`,
+          );
+        });
+    }, 150);
+  }
+
+  return {
+    name: 'birthday-public-photos',
+    async configResolved(config) {
+      publicDir = config.publicDir;
+      photosDir = path.join(publicDir, 'photos');
+      manifestPath = path.join(publicDir, 'photos.json');
+      await writePhotoManifest();
+    },
+    async buildStart() {
+      await writePhotoManifest();
+    },
+    configureServer(server) {
+      devServer = server;
+      server.watcher.add(photosDir);
+
+      const onPhotoChange = (filePath: string) => {
+        const relativePath = path.relative(photosDir, filePath);
+        if (
+          relativePath === '' ||
+          relativePath === '..' ||
+          relativePath.startsWith(`..${path.sep}`) ||
+          path.isAbsolute(relativePath)
+        ) {
+          return;
+        }
+        scheduleManifestRefresh();
+      };
+      const events = ['add', 'change', 'unlink', 'addDir', 'unlinkDir'] as const;
+      events.forEach((event) => server.watcher.on(event, onPhotoChange));
+
+      server.httpServer?.once('close', () => {
+        events.forEach((event) => server.watcher.off(event, onPhotoChange));
+        if (refreshTimer) clearTimeout(refreshTimer);
+      });
+    },
+  };
+}
+
 export default defineConfig({
   base: basePath,
   plugins: [
+    publicPhotosPlugin(),
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),

@@ -1,5 +1,21 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useBirthdayMusic } from '@/hooks/use-birthday-music';
+
+type PublicPhoto = {
+  src: string;
+  name: string;
+  title: string;
+};
+
+function isPublicPhoto(value: unknown): value is PublicPhoto {
+  if (typeof value !== 'object' || value === null) return false;
+  const photo = value as Record<string, unknown>;
+  return (
+    typeof photo.src === 'string' &&
+    typeof photo.name === 'string' &&
+    typeof photo.title === 'string'
+  );
+}
 
 const memories = [
   {
@@ -52,6 +68,39 @@ function Heart({ className = '' }: { className?: string }) {
 
 function App() {
   const { isPlaying, error: musicError, toggleMusic } = useBirthdayMusic();
+  const [publicPhotos, setPublicPhotos] = useState<PublicPhoto[]>([]);
+  const [photoLoadError, setPhotoLoadError] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPublicPhotos() {
+      try {
+        const response = await fetch(`${import.meta.env.BASE_URL}photos.json`, {
+          cache: 'no-store',
+        });
+        if (!response.ok) {
+          throw new Error(`Photo list request returned ${response.status}`);
+        }
+        const data: unknown = await response.json();
+        if (!Array.isArray(data) || !data.every(isPublicPhoto)) {
+          throw new Error('The public photo list has an invalid format');
+        }
+        if (!cancelled) setPublicPhotos(data);
+      } catch {
+        if (!cancelled) {
+          setPhotoLoadError(
+            'The extra photos could not be loaded. Check the public/photos folder and refresh the page.',
+          );
+        }
+      }
+    }
+
+    void loadPublicPhotos();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const targets = document.querySelectorAll<HTMLElement>('.reveal');
@@ -72,7 +121,7 @@ function App() {
     );
     targets.forEach((target) => observer.observe(target));
     return () => observer.disconnect();
-  }, []);
+  }, [publicPhotos.length]);
 
   return (
     <main className="scrapbook">
@@ -126,14 +175,15 @@ function App() {
       </section>
 
       <p className="intro-note reveal">For all the little moments that became <span>our favorite memories.</span></p>
-      <div className="placeholder-notice">Personalize this page: replace each SAMPLE IMAGE FILE and sample caption with your own photos and memories. These generated illustrative photos are placeholders and do not depict the birthday recipient.</div>
+      <div className="placeholder-notice">Personalize this page: replace each SAMPLE IMAGE FILE and sample caption with your own photos and memories. These generated illustrative photos are placeholders and do not depict the birthday recipient. To add more photos automatically, put JPG, PNG, GIF, WebP, or AVIF files in public/photos.</div>
 
       <section className="memory-section" id="memories" aria-labelledby="memory-heading">
         <div className="section-heading reveal">
           <span className="section-kicker">A few pages from my favorite story</span>
           <h2 id="memory-heading">The moments I keep</h2>
-          <p>Sample captions below are prompts to make your own.</p>
+          <p>Sample captions below are prompts to make your own. Add photos to public/photos and they’ll appear here automatically.</p>
         </div>
+        {photoLoadError && <p className="photo-load-error" role="alert">{photoLoadError}</p>}
         {memories.map((memory) => (
           <article className="memory reveal" key={memory.number}>
             <div className="memory-art">
@@ -147,6 +197,26 @@ function App() {
             </div>
           </article>
         ))}
+        {publicPhotos.map((photo, index) => {
+          const number = String(memories.length + index + 1).padStart(2, '0');
+          return (
+            <article className="memory reveal" key={photo.src}>
+              <div className="memory-art">
+                <img
+                  src={`${import.meta.env.BASE_URL}${photo.src}`}
+                  alt={`Added scrapbook photo: ${photo.title}`}
+                  loading="lazy"
+                />
+              </div>
+              <div className="memory-copy">
+                <span className="memory-index">{number} / Added photo</span>
+                <h3>{photo.title}</h3>
+                <p>A favorite moment added to this birthday scrapbook.</p>
+                <p className="memory-caption">{photo.title}</p>
+              </div>
+            </article>
+          );
+        })}
       </section>
 
       <section className="birthday-note" aria-labelledby="letter-heading">
