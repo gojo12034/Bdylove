@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Birthday Scrapbook"
+description = "A romantic birthday photo scrapbook with animated scroll reveals, floating hearts, heartfelt captions, and a personal message at the end."
+version = "1.0.0"
+id = "artifacts/birthday-scrapbook"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18568
+
+[services.development]
+run = "pnpm --filter @workspace/birthday-scrapbook run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/birthday-scrapbook", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/birthday-scrapbook/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18568"
+BASE_PATH = "/"

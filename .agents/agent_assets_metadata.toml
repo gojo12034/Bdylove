@@ -1,0 +1,16 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "8I1mojCdq4cXHGWFffo5g"
+uri = "file://artifacts/birthday-scrapbook/birthday-scrapbook.html"
+type = "html"
+title = "Birthday Scrapbook — Standalone HTML"
+description = "A single-file romantic birthday scrapbook with inline styling and scripts plus embedded, replaceable sample photos."
+logical_id = "8260135c-e1d1-4288-acb0-82d8893c7ff4"
+content_hash = "sha256:b1822fded690e85b1fb421bc58b5dfa8f27b666e14e1a893b82e688470b41247"
+size = 877797
+mtime_ms = 1792154192304
+storage_uri = "gcs://replit-rams-assets-kirk/rams/assets/repl:7dedbdaf-4732-451d-b786-61df4ba486b1/8260135c-e1d1-4288-acb0-82d8893c7ff4/5eac7be9-8923-4b23-a189-5524ef47b71d"
+storage_version_token = "1792154214354113"
+content_type = "text/html"
