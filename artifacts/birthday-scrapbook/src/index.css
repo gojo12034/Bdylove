@@ -273,6 +273,11 @@
 }
 .memory-art:hover { box-shadow: 0 26px 56px rgba(79,49,48,.2); }
 .memory-art::before { content: ""; position: absolute; inset: 8px; border: 1px solid rgba(130, 101, 94, .14); pointer-events: none; z-index: 1; }
+.memory-art.memory-video-art { width: min(100%, 420px); cursor: default; }
+.memory-video-art video {
+  display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+  background: #31262b; border: 1px solid rgba(130, 101, 94, .14);
+}
 .memory-art img {
   display: block; width: 100%; aspect-ratio: 1.02 / 1; object-fit: cover; filter: saturate(.78);
   transition: transform .75s cubic-bezier(.2,.7,.2,1), filter .75s ease;
@@ -407,11 +412,6 @@
   100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); filter: blur(0); }
 }
 @keyframes lightbox-aura { to { transform: rotate(360deg) scale(1.08); } }
-.placeholder-notice {
-  width: fit-content; max-width: calc(100% - 36px); margin: 0 auto 36px; padding: 10px 15px;
-  border: 1px dashed rgba(165,80,98,.38); border-radius: 4px;
-  color: #80666a; background: rgba(255,250,241,.55); font-size: 11px; line-height: 1.6;
-}
 .photo-load-error { color: #8f3543; text-align: center; font-size: 13px; }
 @media (max-width: 760px) {
   .topbar { width: calc(100% - 36px); min-height: 62px; }

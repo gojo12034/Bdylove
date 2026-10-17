@@ -9,6 +9,12 @@ type PublicPhoto = {
   title: string;
 };
 
+type PublicVideo = {
+  src: string;
+  name: string;
+  title: string;
+};
+
 type ZoomPhoto = {
   src: string;
   alt: string;
@@ -23,6 +29,20 @@ function isPublicPhoto(value: unknown): value is PublicPhoto {
     typeof photo.name === 'string' &&
     typeof photo.title === 'string'
   );
+}
+
+function isPublicVideo(value: unknown): value is PublicVideo {
+  if (typeof value !== 'object' || value === null) return false;
+  const video = value as Record<string, unknown>;
+  return (
+    typeof video.src === 'string' &&
+    typeof video.name === 'string' &&
+    typeof video.title === 'string'
+  );
+}
+
+function publicAssetUrl(src: string) {
+  return `${import.meta.env.BASE_URL}${src.replace(/^\/+/, '')}`;
 }
 
 const memories = [
@@ -77,6 +97,7 @@ function Heart({ className = '' }: { className?: string }) {
 function App() {
   const { isPlaying, error: musicError, toggleMusic } = useBirthdayMusic();
   const [publicPhotos, setPublicPhotos] = useState<PublicPhoto[]>([]);
+  const [publicVideos, setPublicVideos] = useState<PublicVideo[]>([]);
   const [photoLoadError, setPhotoLoadError] = useState('');
   const [activePhoto, setActivePhoto] = useState<ZoomPhoto | null>(null);
   const photoCloseButtonRef = useRef<HTMLButtonElement>(null);
@@ -92,21 +113,41 @@ function App() {
 
     async function loadPublicPhotos() {
       try {
-        const response = await fetch(`${import.meta.env.BASE_URL}photos.json`, {
-          cache: 'no-store',
-        });
-        if (!response.ok) {
-          throw new Error(`Photo list request returned ${response.status}`);
+        const [photoResponse, videoResponse] = await Promise.all([
+          fetch(publicAssetUrl('photos.json'), { cache: 'no-store' }),
+          fetch(publicAssetUrl('videos.json'), { cache: 'no-store' }),
+        ]);
+        if (!photoResponse.ok || !videoResponse.ok) {
+          throw new Error('The public media lists could not be loaded');
         }
-        const data: unknown = await response.json();
-        if (!Array.isArray(data) || !data.every(isPublicPhoto)) {
-          throw new Error('The public photo list has an invalid format');
+        const [photoData, videoData]: [unknown, unknown] = await Promise.all([
+          photoResponse.json(),
+          videoResponse.json(),
+        ]);
+        if (
+          !Array.isArray(photoData) ||
+          !photoData.every(isPublicPhoto) ||
+          !Array.isArray(videoData) ||
+          !videoData.every(isPublicVideo)
+        ) {
+          throw new Error('A public media list has an invalid format');
         }
-        if (!cancelled) setPublicPhotos(data);
+        if (!cancelled) {
+          const alreadyShown = new Set(
+            memories.map((memory) => memory.image.replace(/^\/+/, '')),
+          );
+          alreadyShown.add('sample-memory-1.jpg');
+          setPublicPhotos(
+            photoData.filter(
+              (photo) => !alreadyShown.has(decodeURIComponent(photo.src)),
+            ),
+          );
+          setPublicVideos(videoData);
+        }
       } catch {
         if (!cancelled) {
           setPhotoLoadError(
-            'The extra photos could not be loaded. Check the public/photos folder and refresh the page.',
+            'Photos or videos could not be loaded. Check the public folder and refresh the page.',
           );
         }
       }
@@ -137,7 +178,7 @@ function App() {
     );
     targets.forEach((target) => observer.observe(target));
     return () => observer.disconnect();
-  }, [publicPhotos.length]);
+  }, [publicPhotos.length, publicVideos.length]);
 
   useEffect(() => {
     if (!activePhoto) return;
@@ -203,7 +244,7 @@ function App() {
             className="hero-photo photo-trigger"
             type="button"
             onClick={(event) => openPhoto(event, {
-              src: '/sample-memory-1.jpg',
+              src: publicAssetUrl('/sample-memory-1.jpg'),
               alt: 'Illustrative sample photo of two people walking hand in hand on a beach at sunset',
               title: 'Our favorite kind of day',
             })}
@@ -211,7 +252,7 @@ function App() {
           >
             <span className="tape" aria-hidden="true" />
             {/* SAMPLE IMAGE — replace /sample-memory-1.jpg with your own photograph; this illustration is not the recipient. */}
-            <img src="/sample-memory-1.jpg" alt="Illustrative sample photo of two people walking hand in hand on a beach at sunset" />
+            <img src={publicAssetUrl('/sample-memory-1.jpg')} alt="Illustrative sample photo of two people walking hand in hand on a beach at sunset" />
             <span className="photo-zoom-hint">Tap to zoom</span>
             <span className="photo-label">our favorite kind of day</span>
           </button>
@@ -220,13 +261,12 @@ function App() {
       </section>
 
       <p className="intro-note reveal">For all the little moments that became <span>our favorite memories.</span></p>
-      <div className="placeholder-notice"></div>
 
       <section className="memory-section" id="memories" aria-labelledby="memory-heading">
         <div className="section-heading reveal">
           <span className="section-kicker">A few pages from my favorite story</span>
           <h2 id="memory-heading">The moments I keep</h2>
-          <p></p>
+          <p>Tap a photo to see it up close. New photos in the public folder appear here automatically.</p>
         </div>
         {photoLoadError && <p className="photo-load-error" role="alert">{photoLoadError}</p>}
         {memories.map((memory) => (
@@ -235,13 +275,13 @@ function App() {
               className="memory-art photo-trigger"
               type="button"
               onClick={(event) => openPhoto(event, {
-                src: memory.image,
+                src: publicAssetUrl(memory.image),
                 alt: memory.alt,
                 title: memory.title,
               })}
               aria-label={`Enlarge photo: ${memory.title}`}
             >
-              <img src={memory.image} alt={memory.alt} loading="lazy" />
+              <img src={publicAssetUrl(memory.image)} alt={memory.alt} loading="lazy" />
               <span className="photo-zoom-hint">Tap to zoom</span>
             </button>
             <div className="memory-copy">
@@ -260,14 +300,14 @@ function App() {
                 className="memory-art photo-trigger"
                 type="button"
                 onClick={(event) => openPhoto(event, {
-                  src: `${import.meta.env.BASE_URL}${photo.src}`,
+                  src: publicAssetUrl(photo.src),
                   alt: `Added scrapbook photo: ${photo.title}`,
                   title: photo.title,
                 })}
                 aria-label={`Enlarge photo: ${photo.title}`}
               >
                 <img
-                  src={`${import.meta.env.BASE_URL}${photo.src}`}
+                  src={publicAssetUrl(photo.src)}
                   alt={`Added scrapbook photo: ${photo.title}`}
                   loading="lazy"
                 />
@@ -278,6 +318,32 @@ function App() {
                 <h3>{photo.title}</h3>
                 <p>A favorite moment added to this birthday scrapbook.</p>
                 <p className="memory-caption">{photo.title}</p>
+              </div>
+            </article>
+          );
+        })}
+        {publicVideos.map((video, index) => {
+          const number = String(
+            memories.length + publicPhotos.length + index + 1,
+          ).padStart(2, '0');
+          return (
+            <article className="memory reveal memory-video" key={video.src}>
+              <div className="memory-art memory-video-art">
+                <video
+                  src={publicAssetUrl(video.src)}
+                  poster={publicAssetUrl('/sample-memory-7.jpg')}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  aria-label={`Play video: ${video.title}`}
+                >
+                  Your browser does not support the video element.
+                </video>
+              </div>
+              <div className="memory-copy">
+                <span className="memory-index">{number} / A moving memory</span>
+                <h3>{video.title}</h3>
+                <p>A little piece of this story, in motion. Press play to watch.</p>
               </div>
             </article>
           );
