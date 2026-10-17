@@ -15,11 +15,9 @@ type PublicVideo = {
   title: string;
 };
 
-type ZoomPhoto = {
-  src: string;
-  alt: string;
-  title: string;
-};
+type ZoomMedia =
+  | { kind: 'photo'; src: string; alt: string; title: string }
+  | { kind: 'video'; src: string; poster: string; title: string };
 
 function isPublicPhoto(value: unknown): value is PublicPhoto {
   if (typeof value !== 'object' || value === null) return false;
@@ -46,6 +44,7 @@ function publicAssetUrl(src: string) {
 }
 
 const memories = [
+  // EDIT TEXT: Replace these story numbers, titles, sentences, and captions.
   {
     number: '01 / The little things',
     title: 'A day worth keeping',
@@ -95,17 +94,32 @@ function Heart({ className = '' }: { className?: string }) {
 }
 
 function App() {
-  const { isPlaying, error: musicError, toggleMusic } = useBirthdayMusic();
+  const { isPlaying, error: musicError, toggleMusic } = useBirthdayMusic(
+    publicAssetUrl('/sample-music.mp3'),
+  );
   const [publicPhotos, setPublicPhotos] = useState<PublicPhoto[]>([]);
   const [publicVideos, setPublicVideos] = useState<PublicVideo[]>([]);
   const [photoLoadError, setPhotoLoadError] = useState('');
-  const [activePhoto, setActivePhoto] = useState<ZoomPhoto | null>(null);
+  const [activeMedia, setActiveMedia] = useState<ZoomMedia | null>(null);
   const photoCloseButtonRef = useRef<HTMLButtonElement>(null);
   const photoTriggerRef = useRef<HTMLButtonElement | null>(null);
 
-  function openPhoto(event: MouseEvent<HTMLButtonElement>, photo: ZoomPhoto) {
+  function openPhoto(
+    event: MouseEvent<HTMLButtonElement>,
+    photo: { src: string; alt: string; title: string },
+  ) {
     photoTriggerRef.current = event.currentTarget;
-    setActivePhoto(photo);
+    setActiveMedia({ kind: 'photo', ...photo });
+  }
+
+  function openVideo(event: MouseEvent<HTMLButtonElement>, video: PublicVideo) {
+    photoTriggerRef.current = event.currentTarget;
+    setActiveMedia({
+      kind: 'video',
+      src: publicAssetUrl(video.src),
+      poster: publicAssetUrl('/sample-memory-7.jpg'),
+      title: video.title,
+    });
   }
 
   useEffect(() => {
@@ -181,12 +195,12 @@ function App() {
   }, [publicPhotos.length, publicVideos.length]);
 
   useEffect(() => {
-    if (!activePhoto) return;
+    if (!activeMedia) return;
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setActivePhoto(null);
+      if (event.key === 'Escape') setActiveMedia(null);
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -196,11 +210,20 @@ function App() {
       window.removeEventListener('keydown', handleKeyDown);
       photoTriggerRef.current?.focus();
     };
-  }, [activePhoto]);
+  }, [activeMedia]);
 
   return (
     <>
     <main className="scrapbook">
+      <div className="ambient-birthday" aria-hidden="true">
+        <span className="ambient-shape ambient-heart ambient-heart-one">♡</span>
+        <span className="ambient-shape ambient-star ambient-star-one">✦</span>
+        <span className="ambient-shape ambient-heart ambient-heart-two">♡</span>
+        <span className="ambient-shape ambient-star ambient-star-two">✧</span>
+        <span className="ambient-shape ambient-heart ambient-heart-three">♡</span>
+        <span className="ambient-shape ambient-orb ambient-orb-one" />
+        <span className="ambient-shape ambient-orb ambient-orb-two" />
+      </div>
       <a className="skip-link" href="#memories">Skip to the memories</a>
       <header className="topbar">
         <div className="brand">
@@ -230,6 +253,7 @@ function App() {
 
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-copy">
+          {/* EDIT TEXT: Update the short intro, headline, and description here. */}
           <span className="eyebrow">For the one who makes every day brighter</span>
           <h1 id="hero-title">Today is<br />all <em>about you.</em></h1>
           <p className="hero-description">A few favorite moments, a whole lot of love, and one more reason to celebrate the person you are.</p>
@@ -328,18 +352,16 @@ function App() {
           ).padStart(2, '0');
           return (
             <article className="memory reveal memory-video" key={video.src}>
-              <div className="memory-art memory-video-art">
-                <video
-                  src={publicAssetUrl(video.src)}
-                  poster={publicAssetUrl('/sample-memory-7.jpg')}
-                  controls
-                  playsInline
-                  preload="metadata"
-                  aria-label={`Play video: ${video.title}`}
-                >
-                  Your browser does not support the video element.
-                </video>
-              </div>
+              <button
+                className="memory-art memory-video-art video-trigger"
+                type="button"
+                onClick={(event) => openVideo(event, video)}
+                aria-label={`Open video: ${video.title}`}
+              >
+                <img src={publicAssetUrl('/sample-memory-7.jpg')} alt={`Preview for video: ${video.title}`} loading="lazy" />
+                <span className="video-play-mark" aria-hidden="true">▶</span>
+                <span className="photo-zoom-hint">Tap to watch</span>
+              </button>
               <div className="memory-copy">
                 <span className="memory-index">{number} / A moving memory</span>
                 <h3>{video.title}</h3>
@@ -352,6 +374,7 @@ function App() {
 
       <section className="birthday-note" aria-labelledby="letter-heading">
         <div className="letter-card reveal">
+          {/* EDIT TEXT: Replace the greeting, recipient, letter, and sign-off. */}
           <svg className="letter-flourish" viewBox="0 0 32 32" fill="none" aria-hidden="true">
             <path d="M16 27s-11-6.8-11-15a6.2 6.2 0 0 1 11-3.9A6.2 6.2 0 0 1 27 12c0 8.2-11 15-11 15Z" stroke="currentColor" strokeWidth="1.4" />
           </svg>
@@ -363,7 +386,7 @@ function App() {
         </div>
       </section>
       <footer className="footer">
-        {/* Replace this placeholder destination with the site you want to open. */}
+        {/* EDIT LINK: Replace the destination and visible button label here. */}
         <a
           className="birthday-cta"
           href="https://for-bday.onrender.com/"
@@ -379,26 +402,37 @@ function App() {
         <span>A small keepsake for a very big love.</span>
       </footer>
     </main>
-    {activePhoto && createPortal(
+    {activeMedia && createPortal(
       <div
         className="photo-lightbox"
         role="dialog"
         aria-modal="true"
-        aria-label={`Enlarged photo: ${activePhoto.title}`}
-        onClick={() => setActivePhoto(null)}
+        aria-label={`${activeMedia.kind === 'video' ? 'Enlarged video' : 'Enlarged photo'}: ${activeMedia.title}`}
+        onClick={() => setActiveMedia(null)}
       >
         <button
           className="lightbox-close"
           type="button"
           ref={photoCloseButtonRef}
-          onClick={() => setActivePhoto(null)}
-          aria-label="Close enlarged photo"
+          onClick={() => setActiveMedia(null)}
+          aria-label="Close enlarged media"
         >
           <span aria-hidden="true">×</span>
         </button>
         <figure className="lightbox-frame" onClick={(event) => event.stopPropagation()}>
-          <img src={activePhoto.src} alt={activePhoto.alt} />
-          <figcaption>{activePhoto.title}</figcaption>
+          {activeMedia.kind === 'photo' ? (
+            <img src={activeMedia.src} alt={activeMedia.alt} />
+          ) : (
+            <video
+              src={activeMedia.src}
+              poster={activeMedia.poster}
+              controls
+              autoPlay
+              playsInline
+              aria-label={`Play video: ${activeMedia.title}`}
+            />
+          )}
+          <figcaption>{activeMedia.title}</figcaption>
         </figure>
         <p className="lightbox-instruction">Press Esc or click outside the photo to close</p>
       </div>,

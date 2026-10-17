@@ -121,6 +121,28 @@
   will-change: transform;
 }
 .scrapbook > * { position: relative; z-index: 1; }
+.scrapbook > .ambient-birthday {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+}
+.ambient-shape { position: absolute; display: block; animation: birthday-float 19s ease-in-out infinite; }
+.ambient-heart { color: rgba(165, 80, 98, .32); font: 26px/1 var(--app-font-serif); }
+.ambient-star { color: rgba(180, 133, 83, .5); font-size: 18px; animation-name: birthday-twinkle; }
+.ambient-heart-one { top: 16%; left: 7%; animation-delay: -5s; }
+.ambient-star-one { top: 28%; right: 9%; animation-delay: -9s; }
+.ambient-heart-two { top: 59%; right: 13%; font-size: 20px; animation-delay: -12s; }
+.ambient-star-two { top: 75%; left: 14%; animation-delay: -3s; }
+.ambient-heart-three { top: 89%; left: 78%; font-size: 22px; animation-delay: -8s; }
+.ambient-orb { width: 10px; height: 10px; border: 1px solid rgba(211, 154, 160, .55); border-radius: 50%; }
+.ambient-orb-one { top: 42%; left: 25%; animation-delay: -2s; }
+.ambient-orb-two { top: 82%; right: 24%; width: 7px; height: 7px; animation-delay: -11s; }
+@keyframes birthday-float {
+  0%, 100% { transform: translate3d(0, 8px, 0) rotate(-8deg); }
+  50% { transform: translate3d(10px, -24px, 0) rotate(10deg); }
+}
+@keyframes birthday-twinkle {
+  0%, 100% { opacity: .28; transform: scale(.8) rotate(0); }
+  50% { opacity: .85; transform: scale(1.2) rotate(20deg); }
+}
 .skip-link {
   position: absolute;
   left: 14px;
@@ -273,10 +295,14 @@
 }
 .memory-art:hover { box-shadow: 0 26px 56px rgba(79,49,48,.2); }
 .memory-art::before { content: ""; position: absolute; inset: 8px; border: 1px solid rgba(130, 101, 94, .14); pointer-events: none; z-index: 1; }
-.memory-art.memory-video-art { width: min(100%, 420px); cursor: default; }
-.memory-video-art video {
-  display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
-  background: #31262b; border: 1px solid rgba(130, 101, 94, .14);
+.memory-art.memory-video-art { width: min(100%, 210px); cursor: zoom-in; }
+.video-play-mark {
+  position: absolute; top: 50%; left: 50%; z-index: 2;
+  display: grid; place-items: center; width: 50px; height: 50px;
+  border: 1px solid rgba(255,250,241,.72); border-radius: 50%;
+  background: rgba(69,53,58,.64); color: #fffaf1;
+  font-size: 17px; transform: translate(-50%, -50%); pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,.18);
 }
 .memory-art img {
   display: block; width: 100%; aspect-ratio: 1.02 / 1; object-fit: cover; filter: saturate(.78);
@@ -390,12 +416,14 @@
   max-width: 100%; max-height: 100%; margin: 0;
   animation: lightbox-photo-in .62s cubic-bezier(.16,1,.3,1) both;
 }
-.lightbox-frame img {
+.lightbox-frame img,
+.lightbox-frame video {
   display: block; max-width: min(88vw, 1100px); max-height: 78vh;
   width: auto; height: auto; object-fit: contain;
   border: 8px solid #fffaf1; border-bottom-width: 30px; border-radius: 4px;
   background: #fffaf1; box-shadow: 0 30px 100px rgba(0,0,0,.48), 0 0 55px rgba(233,174,194,.2);
 }
+.lightbox-frame video { width: min(88vw, 1100px); aspect-ratio: 16 / 9; background: #1f1a1c; }
 .lightbox-frame figcaption {
   margin-top: 15px; color: rgba(255,250,241,.92);
   font: italic 20px/1.4 var(--app-font-serif); text-align: center;
@@ -435,14 +463,16 @@
   .birthday-note { padding: 86px 24px 96px; }
   .letter-card p { font-size: 14px; }
   .photo-lightbox { padding: 20px 14px max(24px, env(safe-area-inset-bottom)); }
-  .lightbox-frame img { max-width: 92vw; max-height: 72vh; border-width: 6px; border-bottom-width: 22px; }
+  .lightbox-frame img, .lightbox-frame video { max-width: 92vw; max-height: 72vh; border-width: 6px; border-bottom-width: 22px; }
   .lightbox-frame figcaption { font-size: 17px; }
   .photo-zoom-hint { top: 8px; right: 8px; padding: 6px 7px; font-size: 7px; }
+  .ambient-heart { font-size: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; transition-duration: .01ms!important; }
   .reveal { opacity: 1; transform: none; }
   .hero-photo, .memory-art { animation: none!important; }
   .scrapbook::after, .photo-lightbox::before { animation: none!important; }
+  .ambient-shape { animation: none!important; }
   .lightbox-frame { animation: none!important; }
 }
