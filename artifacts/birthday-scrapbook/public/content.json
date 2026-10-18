@@ -1,0 +1,124 @@
+{
+  "brandName": "A little book of us",
+  "topNote": "Made for your birthday",
+  "music": {
+    "playLabel": "Play music",
+    "pauseLabel": "Pause music"
+  },
+  "photoHint": "Tap to zoom",
+  "media": {
+    "addedPhotoChapter": "Added photo",
+    "addedPhotoDescription": "A favorite moment added to this birthday scrapbook.",
+    "videoChapter": "A moving memory",
+    "videoDescription": "A little piece of this story, in motion. Press play to watch.",
+    "videoHint": "Tap to watch",
+    "photoLoadError": "Photos or videos could not be loaded. Check the public folder and refresh the page."
+  },
+  "hero": {
+    "eyebrow": "For the one who makes every day brighter",
+    "headlineStart": "Today is",
+    "headlineAccent": "all about you.",
+    "description": "A few favorite moments, a whole lot of love, and one more reason to celebrate the person you are.",
+    "linkLabel": "Turn the page",
+    "photo": "first-photo.jpg",
+    "photoAlt": "A happy couple smiling together outdoors",
+    "photoTitle": "Our favorite kind of day",
+    "photoLabel": "our favorite kind of day"
+  },
+  "intro": {
+    "before": "For all the little moments that became ",
+    "highlight": "our favorite memories."
+  },
+  "memoriesHeading": {
+    "kicker": "A few pages from my favorite story",
+    "title": "The moments I keep",
+    "description": "Tap a photo to see it up close. Add more photos to the public folder to keep the story growing."
+  },
+  "memories": [
+    {
+      "number": "01",
+      "chapter": "The little things",
+      "title": "A day worth keeping",
+      "text": "Some days do not need a reason to become a favorite. This is a place for the ordinary, lovely moments that somehow stay with you.",
+      "caption": "Late night trip to Camp Lebana, stayed for just an hour to eat dinner haha",
+      "image": "sample-memory-2.jpg",
+      "alt": "A couple taking a smiling selfie together at night"
+    },
+    {
+      "number": "02",
+      "chapter": "Out somewhere",
+      "title": "The long way home",
+      "text": "A winding road, a playlist that got repeated, and nowhere in particular we had to be. I would take the scenic route with you every time.",
+      "caption": "A little adventure is always better with you.",
+      "image": "sample-memory-3.jpg",
+      "alt": "A couple taking a selfie outdoors"
+    },
+    {
+      "number": "03",
+      "chapter": "A favorite afternoon",
+      "title": "Nothing on the calendar",
+      "text": "The best plans are sometimes no plans at all. A slow afternoon with you has a way of making the whole world feel softer around the edges.",
+      "caption": "Add a private in-joke, a favorite café, or the story behind this day.",
+      "image": "sample-memory-5.jpg",
+      "alt": "A couple sharing a fun moment while shopping"
+    },
+    {
+      "number": "04",
+      "chapter": "A little adventure",
+      "title": "The view was worth it",
+      "text": "Fresh air, mountain views, and a road that gave us another reason to stop and take it all in.",
+      "caption": "The fourth page, with the new photo.",
+      "image": "sample-memory-4.jpg",
+      "alt": "A woman smiling on a motorcycle with a mountain view behind her"
+    },
+    {
+      "number": "05",
+      "chapter": "Just us",
+      "title": "Our kind of silly",
+      "text": "No big occasion needed. Just the two of us finding another reason to laugh together.",
+      "caption": "The moments that feel most like us.",
+      "image": "sample-memory-6.jpg",
+      "alt": "A couple posing together playfully while out shopping"
+    },
+    {
+      "number": "06",
+      "chapter": "A favorite feeling",
+      "title": "Right where I belong",
+      "text": "Every familiar smile reminds me how lucky I am to share these days with you.",
+      "caption": "One more little moment I want to keep.",
+      "image": "sample-memory-7.jpg",
+      "alt": "A couple smiling close together"
+    },
+    {
+      "number": "07",
+      "chapter": "The view with you",
+      "title": "A memory to revisit",
+      "text": "Some places stay with us because of the person standing beside us. This is one I will always want to revisit.",
+      "caption": "A beautiful day, saved right here.",
+      "image": "sample-memory-1.jpg",
+      "alt": "A couple posing on a mountain road"
+    },
+    {
+      "number": "08",
+      "chapter": "Always and again",
+      "title": "More memories to come",
+      "text": "This little book is still growing. There are so many more ordinary, wonderful days I cannot wait to share with you.",
+      "caption": "Add your own story here whenever a new favorite moment happens."
+    }
+  ],
+  "letter": {
+    "to": "To my favorite person,",
+    "titleStart": "Happy birthday,",
+    "titleRecipient": "Ashley",
+    "paragraph": "Another year of you in this world is a gift to everyone lucky enough to know you. Thank you for your kind heart, your bright laugh, and the way you make even the quietest moments feel like home. I hope this next trip around the sun brings you all the tenderness and joy you give so freely to everyone around you.",
+    "signoff": "All my love,",
+    "signoffName": "Billy",
+    "small": "Made with all my heart"
+  },
+  "button": {
+    "href": "https://for-bday.onrender.com/",
+    "label": "Open your birthday surprise",
+    "ariaLabel": "Open your special birthday surprise in a new tab",
+    "footerNote": "A small keepsake for a very big love."
+  }
+}
