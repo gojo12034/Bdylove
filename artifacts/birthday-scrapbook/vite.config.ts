@@ -198,6 +198,12 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, 'dist/public'),
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: path.resolve(import.meta.dirname, 'index.html'),
+        standalone: path.resolve(import.meta.dirname, 'birthday-scrapbook.html'),
+      },
+    },
   },
   server: {
     port,
