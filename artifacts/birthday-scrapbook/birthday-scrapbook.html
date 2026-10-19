@@ -522,14 +522,15 @@
         ? new IntersectionObserver((entries, observer) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
+                const reveal = entry.target.closest('.reveal');
+                if (reveal) reveal.classList.add('is-visible');
                 observer.unobserve(entry.target);
               }
             });
-          }, { threshold: 0.14 })
+          }, { threshold: 0.2, rootMargin: '0px 0px -20% 0px' })
         : null;
       function observeReveal(element) {
-        if (revealObserver) revealObserver.observe(element);
+        if (revealObserver) revealObserver.observe(element.querySelector('.memory-art') || element);
         else element.classList.add('is-visible');
       }
       document.querySelectorAll('.reveal').forEach(observeReveal);
@@ -587,7 +588,7 @@
         Array.from(text).forEach((character, index) => {
           const letter = document.createElement('span');
           letter.className = 'typing-char';
-          letter.style.setProperty('--type-delay', `${index * 20}ms`);
+          letter.style.setProperty('--type-delay', `${index * 55}ms`);
           letter.textContent = character;
           visualText.append(letter);
         });

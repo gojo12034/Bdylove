@@ -152,7 +152,7 @@ function TypingText({ text }: { text: string }) {
           <span
             className="typing-char"
             key={`${index}-${character}`}
-            style={{ '--type-delay': `${index * 20}ms` } as CSSProperties}
+            style={{ '--type-delay': `${index * 55}ms` } as CSSProperties}
           >
             {character}
           </span>
@@ -327,14 +327,20 @@ function App() {
       (entries, currentObserver) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
+            // A memory's photo owns its reveal, not the height of the entire card.
+            const reveal = entry.target.closest('.reveal');
+            reveal?.classList.add('is-visible');
             currentObserver.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.14 },
+      { threshold: 0.2, rootMargin: '0px 0px -20% 0px' },
     );
-    targets.forEach((target) => observer.observe(target));
+    targets.forEach((target) => {
+      if (!target.classList.contains('is-visible')) {
+        observer.observe(target.querySelector('.memory-art') ?? target);
+      }
+    });
     return () => observer.disconnect();
   }, [copy?.memories.length, publicPhotos.length, publicVideos.length]);
 
@@ -507,9 +513,9 @@ function App() {
               </button>
               <div className="memory-copy">
                 <span className="memory-index">{number} / {copy.media.addedPhotoChapter}</span>
-                <h3>{photo.title}</h3>
-                <p>{copy.media.addedPhotoDescription}</p>
-                <p className="memory-caption">{photo.title}</p>
+                <h3><TypingText text={photo.title} /></h3>
+                <p><TypingText text={copy.media.addedPhotoDescription} /></p>
+                <p className="memory-caption"><TypingText text={photo.title} /></p>
               </div>
             </article>
           );
@@ -532,8 +538,8 @@ function App() {
               </button>
               <div className="memory-copy">
                 <span className="memory-index">{number} / {copy.media.videoChapter}</span>
-                <h3>{video.title}</h3>
-                <p>{copy.media.videoDescription}</p>
+                <h3><TypingText text={video.title} /></h3>
+                <p><TypingText text={copy.media.videoDescription} /></p>
               </div>
             </article>
           );
