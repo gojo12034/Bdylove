@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { CSSProperties, MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { useBirthdayMusic } from '@/hooks/use-birthday-music';
 
@@ -143,8 +143,23 @@ function normalizedAssetName(src: string) {
   }
 }
 
-function ScrapbookText({ text }: { text: string }) {
-  return <span>{text}</span>;
+function TypingText({ text }: { text: string }) {
+  return (
+    <span className="typing-text">
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        {Array.from(text).map((character, index) => (
+          <span
+            className="typing-char"
+            key={`${index}-${character}`}
+            style={{ '--type-delay': `${index * 8}ms` } as CSSProperties}
+          >
+            {character}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
 }
 
 function isPublicPhoto(value: unknown): value is PublicPhoto {
@@ -401,7 +416,7 @@ function App() {
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-copy">
           <span className="eyebrow">{copy.hero.eyebrow}</span>
-          <h1 id="hero-title">{copy.hero.headlineStart}<br /><em>{copy.hero.headlineAccent}</em></h1>
+          <h1 id="hero-title"><TypingText text={copy.hero.headlineStart} /><br /><em><TypingText text={copy.hero.headlineAccent} /></em></h1>
           <p className="hero-description">{copy.hero.description}</p>
           <a className="hero-link" href="#memories">
             {copy.hero.linkLabel}
@@ -430,14 +445,14 @@ function App() {
       </section>
 
       <p className="intro-note reveal">
-        <ScrapbookText text={copy.intro.before} />
-        <span><ScrapbookText text={copy.intro.highlight} /></span>
+        <TypingText text={copy.intro.before} />
+        <span><TypingText text={copy.intro.highlight} /></span>
       </p>
 
       <section className="memory-section" id="memories" aria-labelledby="memory-heading">
         <div className="section-heading reveal">
           <span className="section-kicker">{copy.memoriesHeading.kicker}</span>
-          <h2 id="memory-heading"><ScrapbookText text={copy.memoriesHeading.title} /></h2>
+          <h2 id="memory-heading"><TypingText text={copy.memoriesHeading.title} /></h2>
           <p>{copy.memoriesHeading.description}</p>
         </div>
         {photoLoadError && <p className="photo-load-error" role="alert">{photoLoadError}</p>}
@@ -463,9 +478,9 @@ function App() {
             )}
             <div className="memory-copy">
               <span className="memory-index">{memory.number} / {memory.chapter}</span>
-              <h3><ScrapbookText text={memory.title} /></h3>
-              <p><ScrapbookText text={memory.text} /></p>
-              <p className="memory-caption"><ScrapbookText text={memory.caption} /></p>
+              <h3><TypingText text={memory.title} /></h3>
+              <p><TypingText text={memory.text} /></p>
+              <p className="memory-caption"><TypingText text={memory.caption} /></p>
             </div>
           </article>
         ))}
@@ -530,10 +545,10 @@ function App() {
           <svg className="letter-flourish" viewBox="0 0 32 32" fill="none" aria-hidden="true">
             <path d="M16 27s-11-6.8-11-15a6.2 6.2 0 0 1 11-3.9A6.2 6.2 0 0 1 27 12c0 8.2-11 15-11 15Z" stroke="currentColor" strokeWidth="1.4" />
           </svg>
-          <p className="letter-to"><ScrapbookText text={copy.letter.to} /></p>
-          <h2 id="letter-heading"><ScrapbookText text={copy.letter.titleStart} /><br /><ScrapbookText text={copy.letter.titleRecipient} /></h2>
-          <p><ScrapbookText text={copy.letter.paragraph} /></p>
-          <p className="letter-signoff"><ScrapbookText text={copy.letter.signoff} /><br /><ScrapbookText text={copy.letter.signoffName} /></p>
+          <p className="letter-to"><TypingText text={copy.letter.to} /></p>
+          <h2 id="letter-heading"><TypingText text={copy.letter.titleStart} /><br /><TypingText text={copy.letter.titleRecipient} /></h2>
+          <p><TypingText text={copy.letter.paragraph} /></p>
+          <p className="letter-signoff"><TypingText text={copy.letter.signoff} /><br /><TypingText text={copy.letter.signoffName} /></p>
           <span className="letter-small">{copy.letter.small}</span>
         </div>
       </section>
