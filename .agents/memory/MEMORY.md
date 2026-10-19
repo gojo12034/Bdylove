@@ -1,0 +1,1 @@
+- [Scrapbook copy visibility](scrapbook-copy-visibility.md) — Render all JSON copy completely; letter-by-letter opacity animation can make sentences appear incomplete.

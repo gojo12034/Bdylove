@@ -234,9 +234,6 @@
     .memory-caption::after { content: "”"; margin-left: 3px; color: #bf8290; font-size: 24px; }
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s, transform .8s cubic-bezier(.2,.7,.2,1); }
     .reveal.is-visible { opacity: 1; transform: translateY(0); }
-    .typing-char { display: inline; opacity: 1; white-space: pre-wrap; }
-    .reveal.is-visible .typing-char, .typing-now .typing-char { animation: type-letter .04s steps(1,end) var(--type-delay,0ms) both; }
-    @keyframes type-letter { from { opacity: 0; transform: translateY(.2em); } to { opacity: 1; transform: translateY(0); } }
     .memory.text-only-memory { grid-template-columns: 1fr; }
     .memory.text-only-memory .memory-copy { max-width: 640px; justify-self: center; padding: clamp(28px,5vw,54px); border: 1px solid rgba(165,80,98,.2); border-radius: 48% 52% 47% 53% / 5% 6% 7% 8%; background: rgba(255,250,241,.56); box-shadow: 0 16px 45px rgba(79,49,48,.08); }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -321,7 +318,6 @@
     @media (prefers-reduced-motion: reduce) {
       *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
       .reveal { opacity: 1; transform: none; }
-      .typing-char { animation-delay: 0ms !important; }
       .scrapbook::after, .photo-lightbox::before, .ambient-shape { animation: none !important; }
     }
   </style>
@@ -544,23 +540,48 @@
       const readableTitle = (value) => typeof value === 'string' && value.trim() ? value.trim() : 'A favorite moment';
       const validEntry = (value) => value && typeof value.src === 'string' && typeof value.name === 'string' && typeof value.title === 'string';
 
-      function typeText(element, value) {
-        const text = String(value || '');
-        element.textContent = '';
-        element.setAttribute('aria-label', text);
-        Array.from(text).forEach((character, index) => {
-          const letter = document.createElement('span');
-          letter.className = 'typing-char';
-          letter.setAttribute('aria-hidden', 'true');
-          letter.style.setProperty('--type-delay', `${Math.min(index * 8, 480)}ms`);
-          letter.textContent = character;
-          element.append(letter);
-        });
+      function hasTextFields(value, fields) {
+        return value !== null &&
+          typeof value === 'object' &&
+          fields.every((field) => typeof value[field] === 'string');
       }
 
-      function addTypingLine(parent, text, tag = 'span') {
+      function isValidContent(content) {
+        return hasTextFields(content, ['brandName', 'topNote', 'photoHint']) &&
+          hasTextFields(content.music, ['playLabel', 'pauseLabel']) &&
+          hasTextFields(content.media, [
+            'addedPhotoChapter', 'addedPhotoDescription', 'videoChapter',
+            'videoDescription', 'videoHint', 'photoLoadError',
+          ]) &&
+          hasTextFields(content.hero, [
+            'eyebrow', 'headlineStart', 'headlineAccent', 'description',
+            'linkLabel', 'photo', 'photoAlt', 'photoTitle', 'photoLabel',
+          ]) &&
+          hasTextFields(content.intro, ['before', 'highlight']) &&
+          hasTextFields(content.memoriesHeading, ['kicker', 'title', 'description']) &&
+          Array.isArray(content.memories) &&
+          content.memories.length >= 8 &&
+          content.memories.every((memory) =>
+            hasTextFields(memory, ['number', 'chapter', 'title', 'text', 'caption']) &&
+            (memory.image === undefined || typeof memory.image === 'string') &&
+            (memory.alt === undefined || typeof memory.alt === 'string'),
+          ) &&
+          hasTextFields(content.letter, [
+            'to', 'titleStart', 'titleRecipient', 'paragraph',
+            'signoff', 'signoffName', 'small',
+          ]) &&
+          hasTextFields(content.button, ['href', 'label', 'ariaLabel', 'footerNote']);
+      }
+
+      function setText(element, value) {
+        const text = String(value || '');
+        element.textContent = text;
+        element.setAttribute('aria-label', text);
+      }
+
+      function addTextLine(parent, text, tag = 'span') {
         const line = document.createElement(tag);
-        typeText(line, text);
+        setText(line, text);
         parent.append(line);
         return line;
       }
@@ -572,12 +593,12 @@
         index.className = 'memory-index';
         index.textContent = `${number} / ${kicker}`;
         const heading = document.createElement('h3');
-        typeText(heading, title);
+        setText(heading, title);
         const text = document.createElement('p');
-        typeText(text, description);
+        setText(text, description);
         const note = document.createElement('p');
         note.className = 'memory-caption';
-        typeText(note, caption);
+        setText(note, caption);
         copyContainer.append(index, heading, text, note);
         return copyContainer;
       }
@@ -586,8 +607,8 @@
         const response = await fetch(publicAssetUrl('content.json'), { cache: 'no-store' });
         if (!response.ok) throw new Error(`Scrapbook content returned ${response.status}`);
         const content = await response.json();
-        if (!content || !Array.isArray(content.memories) || content.memories.length < 8) {
-          throw new Error('Scrapbook content must include memories 1 through 8');
+        if (!isValidContent(content)) {
+          throw new Error('Scrapbook content is missing required text fields or memories');
         }
         window.birthdayCopy = content;
         document.getElementById('brand-copy').textContent = content.brandName;
@@ -597,11 +618,10 @@
         document.getElementById('hero-link-label').textContent = content.hero.linkLabel;
 
         const heroTitle = document.getElementById('hero-title');
-        heroTitle.classList.add('typing-now');
         const heroStart = document.createElement('span');
-        typeText(heroStart, content.hero.headlineStart);
+        setText(heroStart, content.hero.headlineStart);
         const heroAccent = document.createElement('em');
-        typeText(heroAccent, content.hero.headlineAccent);
+        setText(heroAccent, content.hero.headlineAccent);
         heroTitle.append(heroStart, document.createElement('br'), heroAccent);
         heroTitle.setAttribute('aria-label', `${content.hero.headlineStart} ${content.hero.headlineAccent}`);
         const cover = document.getElementById('cover-photo');
@@ -614,23 +634,23 @@
         const intro = document.getElementById('intro-note');
         intro.append(document.createTextNode(content.intro.before));
         const introHighlight = document.createElement('span');
-        typeText(introHighlight, content.intro.highlight);
+        setText(introHighlight, content.intro.highlight);
         intro.append(introHighlight);
 
         document.getElementById('memories-kicker').textContent = content.memoriesHeading.kicker;
-        typeText(document.getElementById('memory-heading'), content.memoriesHeading.title);
+        setText(document.getElementById('memory-heading'), content.memoriesHeading.title);
         document.getElementById('memories-description').textContent = content.memoriesHeading.description;
-        typeText(document.getElementById('letter-to'), content.letter.to);
+        setText(document.getElementById('letter-to'), content.letter.to);
         const letterHeading = document.getElementById('letter-heading');
-        typeText(letterHeading, content.letter.titleStart);
+        setText(letterHeading, content.letter.titleStart);
         letterHeading.append(document.createElement('br'));
-        addTypingLine(letterHeading, content.letter.titleRecipient);
+        addTextLine(letterHeading, content.letter.titleRecipient);
         letterHeading.setAttribute('aria-label', `${content.letter.titleStart} ${content.letter.titleRecipient}`);
-        typeText(document.getElementById('letter-paragraph'), content.letter.paragraph);
+        setText(document.getElementById('letter-paragraph'), content.letter.paragraph);
         const signoff = document.getElementById('letter-signoff');
-        typeText(signoff, content.letter.signoff);
+        setText(signoff, content.letter.signoff);
         signoff.append(document.createElement('br'));
-        addTypingLine(signoff, content.letter.signoffName);
+        addTextLine(signoff, content.letter.signoffName);
         signoff.setAttribute('aria-label', `${content.letter.signoff} ${content.letter.signoffName}`);
         document.getElementById('letter-small').textContent = content.letter.small;
 

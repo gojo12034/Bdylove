@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { CSSProperties, MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { useBirthdayMusic } from '@/hooks/use-birthday-music';
 
@@ -68,34 +68,70 @@ type BirthdayCopy = {
   button: { href: string; label: string; ariaLabel: string; footerNote: string };
 };
 
+function hasTextFields(value: unknown, fields: string[]): boolean {
+  if (typeof value !== 'object' || value === null) return false;
+  const record = value as Record<string, unknown>;
+  return fields.every((field) => typeof record[field] === 'string');
+}
+
 function isBirthdayCopy(value: unknown): value is BirthdayCopy {
   if (typeof value !== 'object' || value === null) return false;
   const copy = value as Record<string, unknown>;
   return (
-    typeof copy.brandName === 'string' &&
-    typeof copy.topNote === 'string' &&
-    typeof copy.photoHint === 'string' &&
-    typeof copy.hero === 'object' &&
-    copy.hero !== null &&
-    typeof copy.memoriesHeading === 'object' &&
-    copy.memoriesHeading !== null &&
+    hasTextFields(copy, ['brandName', 'topNote', 'photoHint']) &&
+    hasTextFields(copy.music, ['playLabel', 'pauseLabel']) &&
+    hasTextFields(copy.media, [
+      'addedPhotoChapter',
+      'addedPhotoDescription',
+      'videoChapter',
+      'videoDescription',
+      'videoHint',
+      'photoLoadError',
+    ]) &&
+    hasTextFields(copy.hero, [
+      'eyebrow',
+      'headlineStart',
+      'headlineAccent',
+      'description',
+      'linkLabel',
+      'photo',
+      'photoAlt',
+      'photoTitle',
+      'photoLabel',
+    ]) &&
+    hasTextFields(copy.intro, ['before', 'highlight']) &&
+    hasTextFields(copy.memoriesHeading, ['kicker', 'title', 'description']) &&
     Array.isArray(copy.memories) &&
     copy.memories.length >= 8 &&
     copy.memories.every(
       (memory) =>
         typeof memory === 'object' &&
         memory !== null &&
-        typeof memory.number === 'string' &&
-        typeof memory.chapter === 'string' &&
-        typeof memory.title === 'string' &&
-        typeof memory.text === 'string' &&
-        typeof memory.caption === 'string' &&
-        (memory.image === undefined || typeof memory.image === 'string'),
+        hasTextFields(memory, [
+          'number',
+          'chapter',
+          'title',
+          'text',
+          'caption',
+        ]) &&
+        (memory.image === undefined || typeof memory.image === 'string') &&
+        (memory.alt === undefined || typeof memory.alt === 'string'),
     ) &&
-    typeof copy.letter === 'object' &&
-    copy.letter !== null &&
-    typeof copy.button === 'object' &&
-    copy.button !== null
+    hasTextFields(copy.letter, [
+      'to',
+      'titleStart',
+      'titleRecipient',
+      'paragraph',
+      'signoff',
+      'signoffName',
+      'small',
+    ]) &&
+    hasTextFields(copy.button, [
+      'href',
+      'label',
+      'ariaLabel',
+      'footerNote',
+    ])
   );
 }
 
@@ -107,25 +143,8 @@ function normalizedAssetName(src: string) {
   }
 }
 
-function TypingText({ text }: { text: string }) {
-  return (
-    <span className="typing-text">
-      <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
-        {Array.from(text).map((character, index) => (
-          <span
-            className="typing-char"
-            key={`${index}-${character}`}
-            style={{
-              '--type-delay': `${Math.min(index * 8, 480)}ms`,
-            } as CSSProperties}
-          >
-            {character}
-          </span>
-        ))}
-      </span>
-    </span>
-  );
+function ScrapbookText({ text }: { text: string }) {
+  return <span>{text}</span>;
 }
 
 function isPublicPhoto(value: unknown): value is PublicPhoto {
@@ -411,14 +430,14 @@ function App() {
       </section>
 
       <p className="intro-note reveal">
-        <TypingText text={copy.intro.before} />
-        <span><TypingText text={copy.intro.highlight} /></span>
+        <ScrapbookText text={copy.intro.before} />
+        <span><ScrapbookText text={copy.intro.highlight} /></span>
       </p>
 
       <section className="memory-section" id="memories" aria-labelledby="memory-heading">
         <div className="section-heading reveal">
           <span className="section-kicker">{copy.memoriesHeading.kicker}</span>
-          <h2 id="memory-heading"><TypingText text={copy.memoriesHeading.title} /></h2>
+          <h2 id="memory-heading"><ScrapbookText text={copy.memoriesHeading.title} /></h2>
           <p>{copy.memoriesHeading.description}</p>
         </div>
         {photoLoadError && <p className="photo-load-error" role="alert">{photoLoadError}</p>}
@@ -444,9 +463,9 @@ function App() {
             )}
             <div className="memory-copy">
               <span className="memory-index">{memory.number} / {memory.chapter}</span>
-              <h3><TypingText text={memory.title} /></h3>
-              <p><TypingText text={memory.text} /></p>
-              <p className="memory-caption"><TypingText text={memory.caption} /></p>
+              <h3><ScrapbookText text={memory.title} /></h3>
+              <p><ScrapbookText text={memory.text} /></p>
+              <p className="memory-caption"><ScrapbookText text={memory.caption} /></p>
             </div>
           </article>
         ))}
@@ -511,10 +530,10 @@ function App() {
           <svg className="letter-flourish" viewBox="0 0 32 32" fill="none" aria-hidden="true">
             <path d="M16 27s-11-6.8-11-15a6.2 6.2 0 0 1 11-3.9A6.2 6.2 0 0 1 27 12c0 8.2-11 15-11 15Z" stroke="currentColor" strokeWidth="1.4" />
           </svg>
-          <p className="letter-to"><TypingText text={copy.letter.to} /></p>
-          <h2 id="letter-heading"><TypingText text={copy.letter.titleStart} /><br /><TypingText text={copy.letter.titleRecipient} /></h2>
-          <p><TypingText text={copy.letter.paragraph} /></p>
-          <p className="letter-signoff"><TypingText text={copy.letter.signoff} /><br /><TypingText text={copy.letter.signoffName} /></p>
+          <p className="letter-to"><ScrapbookText text={copy.letter.to} /></p>
+          <h2 id="letter-heading"><ScrapbookText text={copy.letter.titleStart} /><br /><ScrapbookText text={copy.letter.titleRecipient} /></h2>
+          <p><ScrapbookText text={copy.letter.paragraph} /></p>
+          <p className="letter-signoff"><ScrapbookText text={copy.letter.signoff} /><br /><ScrapbookText text={copy.letter.signoffName} /></p>
           <span className="letter-small">{copy.letter.small}</span>
         </div>
       </section>
