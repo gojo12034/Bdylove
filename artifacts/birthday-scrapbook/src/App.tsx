@@ -116,9 +116,11 @@ function TypingText({ text }: { text: string }) {
           <span
             className="typing-char"
             key={`${index}-${character}`}
-            style={{ '--type-delay': `${index * 14}ms` } as CSSProperties}
+            style={{
+              '--type-delay': `${Math.min(index * 8, 480)}ms`,
+            } as CSSProperties}
           >
-            {character === ' ' ? '\u00a0' : character}
+            {character}
           </span>
         ))}
       </span>

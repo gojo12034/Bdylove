@@ -234,7 +234,7 @@
     .memory-caption::after { content: "”"; margin-left: 3px; color: #bf8290; font-size: 24px; }
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s, transform .8s cubic-bezier(.2,.7,.2,1); }
     .reveal.is-visible { opacity: 1; transform: translateY(0); }
-    .typing-char { display: inline; opacity: 0; white-space: pre-wrap; }
+    .typing-char { display: inline; opacity: 1; white-space: pre-wrap; }
     .reveal.is-visible .typing-char, .typing-now .typing-char { animation: type-letter .04s steps(1,end) var(--type-delay,0ms) both; }
     @keyframes type-letter { from { opacity: 0; transform: translateY(.2em); } to { opacity: 1; transform: translateY(0); } }
     .memory.text-only-memory { grid-template-columns: 1fr; }
@@ -321,6 +321,7 @@
     @media (prefers-reduced-motion: reduce) {
       *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
       .reveal { opacity: 1; transform: none; }
+      .typing-char { animation-delay: 0ms !important; }
       .scrapbook::after, .photo-lightbox::before, .ambient-shape { animation: none !important; }
     }
   </style>
@@ -551,7 +552,7 @@
           const letter = document.createElement('span');
           letter.className = 'typing-char';
           letter.setAttribute('aria-hidden', 'true');
-          letter.style.setProperty('--type-delay', `${index * 14}ms`);
+          letter.style.setProperty('--type-delay', `${Math.min(index * 8, 480)}ms`);
           letter.textContent = character;
           element.append(letter);
         });
