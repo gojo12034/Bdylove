@@ -3,8 +3,8 @@ name: Scrapbook copy visibility
 description: Keep all birthday scrapbook copy fully readable when text is loaded from JSON.
 ---
 
-Keep the scrapbook's letter-by-letter typing effect, but ensure the complete JSON copy remains available to assistive technology and becomes fully visible when typing finishes. Do not let animation leave words permanently missing.
+Keep the scrapbook's letter-by-letter typing effect slow enough to notice, but keep every character readable from the first frame as it darkens into its final color. Also preserve the complete JSON copy for assistive technology.
 
-**Why:** The user wants the copy to type in, but reported that staggered characters made words appear missing.
+**Why:** The user wants slower typing, but reported that hidden or faint characters made sentences appear incomplete.
 
-**How to apply:** When changing either the React scrapbook or its standalone HTML page, keep the full text in an accessible, non-animated form, animate only its visual presentation, show all text when reduced motion is enabled, and validate required JSON fields.
+**How to apply:** When changing either the React scrapbook or its standalone HTML page, animate only the visual presentation, keep reduced-motion users' text fully visible, and validate required JSON fields.

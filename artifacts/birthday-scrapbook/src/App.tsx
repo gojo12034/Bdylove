@@ -152,7 +152,7 @@ function TypingText({ text }: { text: string }) {
           <span
             className="typing-char"
             key={`${index}-${character}`}
-            style={{ '--type-delay': `${index * 8}ms` } as CSSProperties}
+            style={{ '--type-delay': `${index * 20}ms` } as CSSProperties}
           >
             {character}
           </span>
