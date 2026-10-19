@@ -1,5 +1,10 @@
 [
   {
+    "src": "first-photo.jpg",
+    "name": "first-photo",
+    "title": "first photo"
+  },
+  {
     "src": "sample-memory-1.jpg",
     "name": "sample-memory-1",
     "title": "sample memory 1"

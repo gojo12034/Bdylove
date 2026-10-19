@@ -226,6 +226,7 @@ function App() {
 
   useEffect(() => {
     if (!copy) return;
+    const currentCopy = copy;
     let cancelled = false;
 
     async function loadPublicPhotos() {
@@ -252,8 +253,8 @@ function App() {
         if (!cancelled) {
           const alreadyShown = new Set(
             [
-              copy.hero.photo,
-              ...copy.memories.flatMap((memory) =>
+              currentCopy.hero.photo,
+              ...currentCopy.memories.flatMap((memory) =>
                 memory.image ? [memory.image] : [],
               ),
             ].map(normalizedAssetName),
@@ -268,7 +269,7 @@ function App() {
       } catch {
         if (!cancelled) {
           setPhotoLoadError(
-            copy.media.photoLoadError,
+            currentCopy.media.photoLoadError,
           );
         }
       }
