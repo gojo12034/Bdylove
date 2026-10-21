@@ -9,8 +9,8 @@
   "media": {
     "addedPhotoChapter": "Added photo",
     "addedPhotoDescription": "A favorite moment added to this birthday scrapbook.",
-    "videoChapter": "A moving memory",
-    "videoDescription": "A little piece of this story, in motion. Press play to watch.",
+    "videoChapter": "Moments that's worth keeping",
+    "videoDescription": "A little piece of memories in a shell",
     "videoHint": "Tap to watch",
     "photoLoadError": "Photos or videos could not be loaded. Check the public folder and refresh the page."
   },
@@ -18,12 +18,12 @@
     "eyebrow": "For the one who makes every day brighter",
     "headlineStart": "Today is",
     "headlineAccent": "all about you.",
-    "description": "A few favorite moments, a whole lot of love, and one more reason to celebrate the person you are.",
+    "description": "A few favorite moments for a recap. I hope this gives you a smile. ",
     "linkLabel": "Turn the page",
     "photo": "first-photo.jpg",
     "photoAlt": "A happy couple smiling together outdoors",
-    "photoTitle": "Our favorite kind of day",
-    "photoLabel": "our favorite kind of day"
+    "photoTitle": "Hibiscus Camp Trip",
+    "photoLabel": "A View With Me And You"
   },
   "intro": {
     "before": "For all the little moments that became ",
@@ -32,26 +32,26 @@
   "memoriesHeading": {
     "kicker": "A few pages from my favorite story",
     "title": "The moments I keep",
-    "description": "Tap a photo to see it up close. Add more photos to the public folder to keep the story growing."
+    "description": "These are just a few of the special moments we had, sobrang dami hindi ko kaya ilagay lahat HAHAHA"
   },
   "memories": [
     {
       "number": "01",
-      "chapter": "The little things",
+      "chapter": "Camp Lebana Trip",
       "title": "A day worth keeping",
-      "text": "Some days do not need a reason to become a favorite. This is a place for the ordinary, lovely moments that somehow stay with you.",
-      "caption": "Late night trip to Camp Lebana, stayed for just an hour to eat dinner haha",
-      "image": "sample-memory-2.jpg",
-      "alt": "A couple taking a smiling selfie together at night"
+      "text": "Remember this night? I think so much of what to do for the day that we planned this out late, tumambay lang saglit at kumain, pero nakalibre ng treehouse kase hindi natin alam na may bayad pala yun HAHAHA",
+      "caption": "That night trip might not have been longer but I got to spend it with you, and that's what important to me",
+      "image": "sample-memory-1.jpg",
+      "alt": "A couple smiling together outdoors near greenery"
     },
     {
       "number": "02",
-      "chapter": "Out somewhere",
-      "title": "The long way home",
-      "text": "A winding road, a playlist that got repeated, and nowhere in particular we had to be. I would take the scenic route with you every time.",
-      "caption": "A little adventure is always better with you.",
-      "image": "sample-memory-3.jpg",
-      "alt": "A couple taking a selfie outdoors"
+      "chapter": "Back on it again",
+      "title": "Camp lebana Again",
+      "text": "Next day after our supposedly failed trip, we came back, this time we had so much fun. We filmed ourselves playing, and I was so happy seeing you enjoy our time.",
+      "caption": "We were having fun that time quickly passed, Time passes by so fast when you're with someone special.",
+      "image": "sample-memory-2.jpg",
+      "alt": "A couple taking a smiling selfie together at night"
     },
     {
       "number": "03",
@@ -59,8 +59,8 @@
       "title": "Nothing on the calendar",
       "text": "The best plans are sometimes no plans at all. A slow afternoon with you has a way of making the whole world feel softer around the edges.",
       "caption": "Add a private in-joke, a favorite café, or the story behind this day.",
-      "image": "sample-memory-5.jpg",
-      "alt": "A couple sharing a fun moment while shopping"
+      "image": "sample-memory-3.jpg",
+      "alt": "A couple smiling together in front of a colorful outdoor building"
     },
     {
       "number": "04",
@@ -77,8 +77,8 @@
       "title": "Our kind of silly",
       "text": "No big occasion needed. Just the two of us finding another reason to laugh together.",
       "caption": "The moments that feel most like us.",
-      "image": "sample-memory-6.jpg",
-      "alt": "A couple posing together playfully while out shopping"
+      "image": "sample-memory-5.jpg",
+      "alt": "A couple posing together in a shop"
     },
     {
       "number": "06",
@@ -86,8 +86,8 @@
       "title": "Right where I belong",
       "text": "Every familiar smile reminds me how lucky I am to share these days with you.",
       "caption": "One more little moment I want to keep.",
-      "image": "sample-memory-7.jpg",
-      "alt": "A couple smiling close together"
+      "image": "sample-memory-6.jpg",
+      "alt": "A couple smiling and posing together in a shop"
     },
     {
       "number": "07",
@@ -95,8 +95,8 @@
       "title": "A memory to revisit",
       "text": "Some places stay with us because of the person standing beside us. This is one I will always want to revisit.",
       "caption": "A beautiful day, saved right here.",
-      "image": "sample-memory-1.jpg",
-      "alt": "A couple posing on a mountain road"
+      "image": "sample-memory-7.jpg",
+      "alt": "A couple smiling together in a close-up selfie"
     },
     {
       "number": "08",
@@ -108,17 +108,17 @@
   ],
   "letter": {
     "to": "To my favorite person,",
-    "titleStart": "Happy birthday,",
+    "titleStart": "Happy Birthday",
     "titleRecipient": "Ashley",
     "paragraph": "Another year of you in this world is a gift to everyone lucky enough to know you. Thank you for your kind heart, your bright laugh, and the way you make even the quietest moments feel like home. I hope this next trip around the sun brings you all the tenderness and joy you give so freely to everyone around you.",
     "signoff": "All my love,",
     "signoffName": "Billy",
-    "small": "Made with all my heart"
+    "small": "Made with all my 🤍"
   },
   "button": {
     "href": "https://for-bday.onrender.com/",
-    "label": "Open your birthday surprise",
+    "label": "Open this",
     "ariaLabel": "Open your special birthday surprise in a new tab",
-    "footerNote": "A small keepsake for a very big love."
+    "footerNote": "A small keepsake"
   }
 }
