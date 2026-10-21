@@ -121,9 +121,8 @@ const sortedPhotos = photos.sort((a, b) =>
   }),
 );
 
-// Automatically regenerate photos.json only.
-// videos.json is maintained manually so custom video titles
-// and preview text are not overwritten.
+// Only generate photos.json.
+// videos.json is manually maintained and must never be overwritten here.
 await writeFile(
   manifestPath,
   `${JSON.stringify(sortedPhotos.map(toManifestEntry), null, 2)}\n`,
@@ -133,7 +132,9 @@ await writeFile(
 }
 
 function scheduleManifestRefresh() {
-if (refreshTimer) clearTimeout(refreshTimer);
+if (refreshTimer) {
+clearTimeout(refreshTimer);
+}
 
 ```
 refreshTimer = setTimeout(() => {
@@ -206,16 +207,18 @@ configureServer(server) {
     'unlinkDir',
   ] as const;
 
-  events.forEach((event) =>
-    server.watcher.on(event, onMediaChange),
-  );
+  events.forEach((event) => {
+    server.watcher.on(event, onMediaChange);
+  });
 
   server.httpServer?.once('close', () => {
-    events.forEach((event) =>
-      server.watcher.off(event, onMediaChange),
-    );
+    events.forEach((event) => {
+      server.watcher.off(event, onMediaChange);
+    });
 
-    if (refreshTimer) clearTimeout(refreshTimer);
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+    }
   });
 },
 ```
@@ -241,6 +244,7 @@ process.env.REPL_ID !== undefined
           root: path.resolve(import.meta.dirname, '..'),
         }),
       ),
+
       await import('@replit/vite-plugin-dev-banner').then((m) =>
         m.devBanner(),
       ),
@@ -253,14 +257,19 @@ process.env.REPL_ID !== undefined
 resolve: {
 alias: {
 '@': path.resolve(import.meta.dirname, 'src'),
-'@assets': path.resolve(
-import.meta.dirname,
-'..',
-'..',
-'attached_assets',
-),
+
+```
+  '@assets': path.resolve(
+    import.meta.dirname,
+    '..',
+    '..',
+    'attached_assets',
+  ),
 },
+
 dedupe: ['react', 'react-dom'],
+```
+
 },
 
 root: path.resolve(import.meta.dirname),
