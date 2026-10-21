@@ -32,42 +32,42 @@
   "memoriesHeading": {
     "kicker": "A few pages from my favorite story",
     "title": "The moments I keep",
-    "description": "These are just a few of the special moments we had, sobrang dami hindi ko kaya ilagay lahat HAHAHA"
+    "description": "These are just a few of the special moments we had, Madami but we don't have much good pictures of ourselves HAHAHA"
   },
   "memories": [
     {
       "number": "01",
-      "chapter": "Camp Lebana Trip",
-      "title": "A day worth keeping",
-      "text": "Remember this night? I think so much of what to do for the day that we planned this out late, tumambay lang saglit at kumain, pero nakalibre ng treehouse kase hindi natin alam na may bayad pala yun HAHAHA",
-      "caption": "That night trip might not have been longer but I got to spend it with you, and that's what important to me",
+      "chapter": "Hotspring trip?",
+      "title": "A warmth outing",
+      "text": "Remember the day before this day? pumunta tayo dito kahit bumabagyo kase naisip ko na sakto mag hotspring at malamig and panahon kaso bumabagyo ngani kaya ayun wala tayong napala kundi ang umuwe pero I got to hold your hand HAHAHAHA, kinabukasan we decided to go there again hoping na okay na and yun pinagbigyan pede na nga haha. Ang sarappppp, ang init ng tubig tas malamig ang panahon. It was satisfying and enjoyable because you were with me🤍",
+      "caption": "This trip was what I think the opening up to our relationship, I shown you my childish and silly side cause you're comfortable to be with and you made me feel that I don't have to shy away from you.",
       "image": "sample-memory-1.jpg",
       "alt": "A couple smiling together outdoors near greenery"
     },
     {
       "number": "02",
-      "chapter": "Back on it again",
-      "title": "Camp lebana Again",
-      "text": "Next day after our supposedly failed trip, we came back, this time we had so much fun. We filmed ourselves playing, and I was so happy seeing you enjoy our time.",
-      "caption": "We were having fun that time quickly passed, Time passes by so fast when you're with someone special.",
+      "chapter": "Camp Lebana Trip",
+      "title": "Failed or Successful trip?",
+      "text": "Remember this night? I think so much of what to do for the day that we planned this out late, tumambay lang saglit at kumain, pero nakalibre ng treehouse kase hindi natin alam na may bayad pala yun, I think successful parin HAHAHA",
+      "caption": "That night trip might not have been longer but I got to spend it with you, and that's what important to me",
       "image": "sample-memory-2.jpg",
       "alt": "A couple taking a smiling selfie together at night"
     },
     {
       "number": "03",
-      "chapter": "A favorite afternoon",
-      "title": "Nothing on the calendar",
-      "text": "The best plans are sometimes no plans at all. A slow afternoon with you has a way of making the whole world feel softer around the edges.",
-      "caption": "Add a private in-joke, a favorite café, or the story behind this day.",
+      "chapter": "Back on it again",
+      "title": "Camp Lebana again?",
+      "text": "Next day after our supposedly failed trip, we came back, this time we had so much fun. We filmed ourselves playing, and I was so happy seeing you enjoy our time.",
+      "caption": "We were having fun that time quickly passed, Time passes by so fast when you're with someone special.",
       "image": "sample-memory-3.jpg",
       "alt": "A couple smiling together in front of a colorful outdoor building"
     },
     {
       "number": "04",
-      "chapter": "A little adventure",
-      "title": "The view was worth it",
-      "text": "Fresh air, mountain views, and a road that gave us another reason to stop and take it all in.",
-      "caption": "The fourth page, with the new photo.",
+      "chapter": "You with the view",
+      "title": "The view and trip itself was worth it",
+      "text": "Tired for a long trip and we ran out of time kase ang bagal ko magpatakbo chill ride for safety HAHAHA but we got to enjoy the fresh air, mountain views, and the way long road with beautiful views. Ang daming pangyayare sa iisang araw, from our first stop sa nagcarlan view point to infanta quezon, grabe yung pagod sa byahe lalo na on the way back home when we almost ran out of gas and phone batteries sa bundok na muntik pa tayong maligaw HAHAHA buti nalang you encouraged me to find refilling station though what we found was an gas retailer who sells expensive bote-bote gasoline you even told me to ask them to charge our phones kaso I didn't listen, buti nalang nakauwe tayo ng safe kahit inaantok kana sa byahe, thank you for keeping up with my failed trips",
+      "caption": "Most of the time, either successful or unsuccessful trips are what become our most memorable experience.",
       "image": "sample-memory-4.jpg",
       "alt": "A woman smiling on a motorcycle with a mountain view behind her"
     },
