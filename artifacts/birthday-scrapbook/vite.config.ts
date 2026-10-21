@@ -35,6 +35,7 @@ const videoExtensions = new Set(['.m4v', '.mov', '.mp4', '.ogv', '.webm']);
 function publicPhotosPlugin(): Plugin {
   let publicDir = '';
   let manifestPath = '';
+  let videoManifestPath = '';
   
   let devServer: ViteDevServer | undefined;
   let refreshTimer: ReturnType<typeof setTimeout> | undefined;
@@ -90,11 +91,11 @@ function publicPhotosPlugin(): Plugin {
       a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
     );
 
-    
-await writeFile(
-  manifestPath,
-  `${JSON.stringify(sortedPhotos.map(toManifestEntry), null, 2)}\n`,
-),
+    await Promise.all([
+      writeFile(
+        manifestPath,
+        `${JSON.stringify(sortedPhotos.map(toManifestEntry), null, 2)}\n`,
+      ),
       writeFile(
         videoManifestPath,
         `${JSON.stringify(sortedVideos.map(toManifestEntry), null, 2)}\n`,
@@ -124,6 +125,7 @@ await writeFile(
     async configResolved(config) {
       publicDir = config.publicDir;
       manifestPath = path.join(publicDir, 'photos.json');
+      videoManifestPath = path.join(publicDir, 'videos.json');
       
       await writeMediaManifests();
     },
