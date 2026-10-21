@@ -143,7 +143,7 @@ function normalizedAssetName(src: string) {
   }
 }
 
-function TypingText({ text }: { text: string }) {
+function TypingText({ text, startDelay = 0 }: { text: string; startDelay?: number }) {
   return (
     <span className="typing-text">
       <span className="sr-only">{text}</span>
@@ -152,7 +152,7 @@ function TypingText({ text }: { text: string }) {
           <span
             className="typing-char"
             key={`${index}-${character}`}
-            style={{ '--type-delay': `${index * 55}ms` } as CSSProperties}
+            style={{ '--type-delay': `${startDelay + index * 75}ms` } as CSSProperties}
           >
             {character}
           </span>
@@ -462,11 +462,16 @@ function App() {
           <p>{copy.memoriesHeading.description}</p>
         </div>
         {photoLoadError && <p className="photo-load-error" role="alert">{photoLoadError}</p>}
-        {copy.memories.map((memory) => (
-          <article
-            className={`memory reveal${memory.image ? '' : ' text-only-memory'}`}
-            key={memory.number}
-          >
+        {copy.memories.map((memory) => {
+          const titleLength = Array.from(memory.title).length;
+          const textLength = Array.from(memory.text).length;
+          const textStartDelay = titleLength * 75 + 180;
+          const captionStartDelay = (titleLength + textLength) * 75 + 360;
+          return (
+            <article
+              className={`memory reveal${memory.image ? '' : ' text-only-memory'}`}
+              key={memory.number}
+            >
             {memory.image && (
               <button
                 className="memory-art photo-trigger"
@@ -485,13 +490,16 @@ function App() {
             <div className="memory-copy">
               <span className="memory-index">{memory.number} / {memory.chapter}</span>
               <h3><TypingText text={memory.title} /></h3>
-              <p><TypingText text={memory.text} /></p>
-              <p className="memory-caption"><TypingText text={memory.caption} /></p>
+              <p><TypingText text={memory.text} startDelay={textStartDelay} /></p>
+              <p className="memory-caption"><TypingText text={memory.caption} startDelay={captionStartDelay} /></p>
             </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
         {publicPhotos.map((photo, index) => {
           const number = String(copy.memories.length + index + 1).padStart(2, '0');
+          const titleLength = Array.from(photo.title).length;
+          const descriptionLength = Array.from(copy.media.addedPhotoDescription).length;
           return (
             <article className="memory reveal" key={photo.src}>
               <button
@@ -514,8 +522,8 @@ function App() {
               <div className="memory-copy">
                 <span className="memory-index">{number} / {copy.media.addedPhotoChapter}</span>
                 <h3><TypingText text={photo.title} /></h3>
-                <p><TypingText text={copy.media.addedPhotoDescription} /></p>
-                <p className="memory-caption"><TypingText text={photo.title} /></p>
+                <p><TypingText text={copy.media.addedPhotoDescription} startDelay={titleLength * 75 + 180} /></p>
+                <p className="memory-caption"><TypingText text={photo.title} startDelay={(titleLength + descriptionLength) * 75 + 360} /></p>
               </div>
             </article>
           );
@@ -524,6 +532,7 @@ function App() {
           const number = String(
             copy.memories.length + publicPhotos.length + index + 1,
           ).padStart(2, '0');
+          const titleLength = Array.from(video.title).length;
           return (
             <article className="memory reveal memory-video" key={video.src}>
               <button
@@ -539,7 +548,7 @@ function App() {
               <div className="memory-copy">
                 <span className="memory-index">{number} / {copy.media.videoChapter}</span>
                 <h3><TypingText text={video.title} /></h3>
-                <p><TypingText text={copy.media.videoDescription} /></p>
+                <p><TypingText text={copy.media.videoDescription} startDelay={titleLength * 75 + 180} /></p>
               </div>
             </article>
           );
