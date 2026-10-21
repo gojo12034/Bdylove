@@ -143,20 +143,30 @@ function normalizedAssetName(src: string) {
   }
 }
 
+const typingPalette = ['#634397', '#a63361', '#85420f', '#176b62', '#315b94', '#8b3c6e'];
+
 function TypingText({ text, startDelay = 0 }: { text: string; startDelay?: number }) {
+  let wordIndex = 0;
   return (
     <span className="typing-text">
       <span className="sr-only">{text}</span>
       <span aria-hidden="true">
-        {Array.from(text).map((character, index) => (
-          <span
-            className="typing-char"
-            key={`${index}-${character}`}
-            style={{ '--type-delay': `${startDelay + index * 75}ms` } as CSSProperties}
-          >
-            {character}
-          </span>
-        ))}
+        {Array.from(text).map((character, index) => {
+          const letterColor = typingPalette[wordIndex % typingPalette.length];
+          if (/\s/.test(character)) wordIndex += 1;
+          return (
+            <span
+              className="typing-char"
+              key={`${index}-${character}`}
+              style={{
+                '--type-delay': `${startDelay + index * 75}ms`,
+                '--letter-color': letterColor,
+              } as CSSProperties}
+            >
+              {character}
+            </span>
+          );
+        })}
       </span>
     </span>
   );

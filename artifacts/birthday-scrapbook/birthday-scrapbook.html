@@ -57,38 +57,44 @@
       inset: -18%;
       z-index: 0;
       pointer-events: none;
-      opacity: .58;
+      opacity: .78;
       background:
-        radial-gradient(ellipse at 16% 20%, rgba(212,143,165,.19), transparent 31%),
-        radial-gradient(ellipse at 83% 34%, rgba(226,180,143,.19), transparent 30%),
-        radial-gradient(ellipse at 55% 82%, rgba(184,145,183,.14), transparent 33%);
-      animation: paper-aurora 32s ease-in-out infinite alternate;
+        radial-gradient(ellipse at 14% 18%, rgba(231,133,176,.29), transparent 31%),
+        radial-gradient(ellipse at 83% 25%, rgba(248,185,105,.25), transparent 29%),
+        radial-gradient(ellipse at 61% 69%, rgba(117,194,176,.2), transparent 31%),
+        radial-gradient(ellipse at 18% 77%, rgba(158,143,219,.22), transparent 32%),
+        radial-gradient(ellipse at 91% 84%, rgba(106,174,219,.18), transparent 28%);
+      animation: paper-aurora 24s ease-in-out infinite alternate;
       will-change: transform;
     }
     .scrapbook > * { position: relative; z-index: 1; }
     .scrapbook > .ambient-birthday { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
     .ambient-shape { position: absolute; display: block; animation: birthday-float 19s ease-in-out infinite; }
-    .ambient-heart { color: rgba(165,80,98,.32); font: 26px/1 var(--serif); }
-    .ambient-star { color: rgba(180,133,83,.5); font-size: 18px; animation-name: birthday-twinkle; }
+    .ambient-heart { color: rgba(165,80,98,.72); font: 26px/1 var(--serif); filter: drop-shadow(0 2px 8px rgba(165,80,98,.18)); }
+    .ambient-star { color: #d69a32; font-size: 18px; animation-name: birthday-twinkle; filter: drop-shadow(0 2px 8px rgba(214,154,50,.28)); }
+    .ambient-heart-one { color: #e05e91; }
+    .ambient-heart-two { color: #9870d5; }
+    .ambient-heart-three { color: #e87963; }
+    .ambient-star-two { color: #35a79a; }
     .ambient-heart-one { top: 16%; left: 7%; animation-delay: -5s; }
     .ambient-star-one { top: 28%; right: 9%; animation-delay: -9s; }
     .ambient-heart-two { top: 59%; right: 13%; font-size: 20px; animation-delay: -12s; }
     .ambient-star-two { top: 75%; left: 14%; animation-delay: -3s; }
     .ambient-heart-three { top: 89%; left: 78%; font-size: 22px; animation-delay: -8s; }
-    .ambient-orb { width: 10px; height: 10px; border: 1px solid rgba(211,154,160,.55); border-radius: 50%; }
+    .ambient-orb { width: 10px; height: 10px; border: 1px solid rgba(211,154,160,.7); border-radius: 50%; background: rgba(251,201,99,.38); box-shadow: 0 0 15px rgba(251,201,99,.3); }
     .ambient-orb-one { top: 42%; left: 25%; animation-delay: -2s; }
     .ambient-orb-two { top: 82%; right: 24%; width: 7px; height: 7px; animation-delay: -11s; }
-    .ambient-flower { bottom: -12vh; color: rgba(183,111,126,.45); font: 32px/1 var(--serif); animation: flower-rise 27s linear infinite; }
-    .ambient-flower-one { left: 13%; animation-delay: -5s; }
-    .ambient-flower-two { left: 38%; font-size: 25px; animation-delay: -18s; animation-duration: 33s; }
-    .ambient-flower-three { left: 71%; font-size: 36px; animation-delay: -11s; animation-duration: 30s; }
-    .ambient-flower-four { left: 91%; font-size: 22px; animation-delay: -24s; animation-duration: 35s; }
+    .ambient-flower { bottom: -12vh; color: #dc6f9a; font: 32px/1 var(--serif); animation: flower-rise 27s linear infinite; filter: drop-shadow(0 3px 10px rgba(195,91,136,.22)); }
+    .ambient-flower-one { left: 13%; color: #e26593; animation-delay: -5s; }
+    .ambient-flower-two { left: 38%; color: #8b6aca; font-size: 25px; animation-delay: -18s; animation-duration: 33s; }
+    .ambient-flower-three { left: 71%; color: #e39a3a; font-size: 36px; animation-delay: -11s; animation-duration: 30s; }
+    .ambient-flower-four { left: 91%; color: #39a99d; font-size: 22px; animation-delay: -24s; animation-duration: 35s; }
     .ambient-balloon { bottom: -14vh; width: 24px; height: 32px; border-radius: 50% 50% 46% 46%; background: var(--balloon-fill); box-shadow: inset -4px -3px 7px rgba(91,57,66,.12); animation: balloon-rise 31s linear infinite; }
     .ambient-balloon::before { position: absolute; bottom: -4px; left: 10px; width: 5px; height: 6px; background: var(--balloon-fill); clip-path: polygon(0 0,100% 0,50% 100%); content: ""; }
     .ambient-balloon::after { position: absolute; top: calc(100% + 5px); left: 12px; width: 1px; height: 58px; border-left: 1px solid rgba(117,84,91,.26); content: ""; }
-    .ambient-balloon-one { left: 27%; --balloon-fill: rgba(207,139,153,.5); animation-delay: -19s; }
-    .ambient-balloon-two { left: 61%; width: 19px; height: 26px; --balloon-fill: rgba(225,176,126,.48); animation-delay: -7s; animation-duration: 36s; }
-    .ambient-balloon-three { left: 84%; width: 28px; height: 37px; --balloon-fill: rgba(164,148,185,.4); animation-delay: -27s; animation-duration: 34s; }
+    .ambient-balloon-one { left: 27%; --balloon-fill: rgba(231,105,149,.68); animation-delay: -19s; }
+    .ambient-balloon-two { left: 61%; width: 19px; height: 26px; --balloon-fill: rgba(240,170,71,.7); animation-delay: -7s; animation-duration: 36s; }
+    .ambient-balloon-three { left: 84%; width: 28px; height: 37px; --balloon-fill: rgba(135,111,204,.62); animation-delay: -27s; animation-duration: 34s; }
     @keyframes flower-rise { 0% { opacity: 0; transform: translate3d(0,0,0) rotate(-35deg) scale(.7); } 12% { opacity: .65; } 50% { transform: translate3d(36px,-56vh,0) rotate(120deg) scale(1); } 86% { opacity: .55; } 100% { opacity: 0; transform: translate3d(-28px,-112vh,0) rotate(260deg) scale(.8); } }
     @keyframes balloon-rise { 0% { opacity: 0; transform: translate3d(0,0,0) rotate(-8deg); } 12% { opacity: .62; } 48% { transform: translate3d(24px,-54vh,0) rotate(8deg); } 86% { opacity: .56; } 100% { opacity: 0; transform: translate3d(-18px,-112vh,0) rotate(-10deg); } }
     .skip-link { position: absolute; top: -60px; left: 12px; z-index: 10; padding: 10px; background: #fffaf1; color: var(--wine); }
@@ -234,9 +240,9 @@
     .memory-caption::after { content: "”"; margin-left: 3px; color: #bf8290; font-size: 24px; }
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s, transform .8s cubic-bezier(.2,.7,.2,1); }
     .reveal.is-visible { opacity: 1; transform: translateY(0); }
-    .typing-char { display: inline; opacity: .55; white-space: pre-wrap; }
+    .typing-char { display: inline; color: var(--letter-color,currentColor); opacity: .9; white-space: pre-wrap; }
     .reveal.is-visible .typing-char, .typing-now .typing-char { animation: type-letter .07s linear var(--type-delay,0ms) both; }
-    @keyframes type-letter { from { opacity: .55; } to { opacity: 1; } }
+    @keyframes type-letter { from { opacity: .9; } to { opacity: 1; } }
     .memory.text-only-memory { grid-template-columns: 1fr; }
     .memory.text-only-memory .memory-copy { max-width: 640px; justify-self: center; padding: clamp(28px,5vw,54px); border: 1px solid rgba(165,80,98,.2); border-radius: 48% 52% 47% 53% / 5% 6% 7% 8%; background: rgba(255,250,241,.56); box-shadow: 0 16px 45px rgba(79,49,48,.08); }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -578,17 +584,23 @@
           hasTextFields(content.button, ['href', 'label', 'ariaLabel', 'footerNote']);
       }
 
+      const typingPalette = ['#634397', '#a63361', '#85420f', '#176b62', '#315b94', '#8b3c6e'];
+
       function typeText(element, value, startDelay = 0) {
         const text = String(value || '');
+        let wordIndex = 0;
         const accessibleText = document.createElement('span');
         accessibleText.className = 'sr-only';
         accessibleText.textContent = text;
         const visualText = document.createElement('span');
         visualText.setAttribute('aria-hidden', 'true');
         Array.from(text).forEach((character, index) => {
+          const letterColor = typingPalette[wordIndex % typingPalette.length];
+          if (/\s/.test(character)) wordIndex += 1;
           const letter = document.createElement('span');
           letter.className = 'typing-char';
           letter.style.setProperty('--type-delay', `${startDelay + index * 75}ms`);
+          letter.style.setProperty('--letter-color', letterColor);
           letter.textContent = character;
           visualText.append(letter);
         });
