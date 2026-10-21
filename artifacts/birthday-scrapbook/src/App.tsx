@@ -432,7 +432,7 @@ function App() {
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-copy">
           <span className="eyebrow">{copy.hero.eyebrow}</span>
-          <h1 id="hero-title"><TypingText text={copy.hero.headlineStart} /><br /><em><TypingText text={copy.hero.headlineAccent} /></em></h1>
+          <h1 id="hero-title" className="typing-now"><TypingText text={copy.hero.headlineStart} /><br /><em><TypingText text={copy.hero.headlineAccent} /></em></h1>
           <p className="hero-description">{copy.hero.description}</p>
           <a className="hero-link" href="#memories">
             {copy.hero.linkLabel}
