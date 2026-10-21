@@ -35,7 +35,6 @@ const videoExtensions = new Set(['.m4v', '.mov', '.mp4', '.ogv', '.webm']);
 function publicPhotosPlugin(): Plugin {
   let publicDir = '';
   let manifestPath = '';
-  let videoManifestPath = '';
   
   let devServer: ViteDevServer | undefined;
   let refreshTimer: ReturnType<typeof setTimeout> | undefined;
@@ -80,27 +79,17 @@ function publicPhotosPlugin(): Plugin {
 
   async function writeMediaManifests() {
     await mkdir(publicDir, { recursive: true });
-    const [photos, videos] = await Promise.all([
+    const [photos] = await Promise.all([
       findMedia(publicDir, photoExtensions),
-      findMedia(publicDir, videoExtensions),
     ]);
     const sortedPhotos = photos.sort((a, b) =>
       a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
     );
-    const sortedVideos = videos.sort((a, b) =>
-      a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }),
-    );
 
-    await Promise.all([
-      writeFile(
-        manifestPath,
-        `${JSON.stringify(sortedPhotos.map(toManifestEntry), null, 2)}\n`,
-      ),
-      writeFile(
-        videoManifestPath,
-        `${JSON.stringify(sortedVideos.map(toManifestEntry), null, 2)}\n`,
-      ),
-    ]);
+    await writeFile(
+      manifestPath,
+      `${JSON.stringify(sortedPhotos.map(toManifestEntry), null, 2)}\n`,
+    );
   }
 
   function scheduleManifestRefresh() {
@@ -125,7 +114,6 @@ function publicPhotosPlugin(): Plugin {
     async configResolved(config) {
       publicDir = config.publicDir;
       manifestPath = path.join(publicDir, 'photos.json');
-      videoManifestPath = path.join(publicDir, 'videos.json');
       
       await writeMediaManifests();
     },
