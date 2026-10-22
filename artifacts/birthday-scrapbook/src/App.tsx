@@ -625,7 +625,7 @@ function App() {
           )}
           <figcaption>{activeMedia.title}</figcaption>
         </figure>
-        <p className="lightbox-instruction">Press Esc or click outside the photo to close</p>
+        <p className="lightbox-instruction">Click close button or outside of photo to close</p>
       </div>,
       document.body,
     )}
